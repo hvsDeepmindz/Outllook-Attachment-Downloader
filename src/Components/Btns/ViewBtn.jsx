@@ -6,7 +6,7 @@ const ViewBtn = ({ btnTitle, btnFunc, btnIcon }) => {
     <>
       <button
         onClick={btnFunc}
-        className={`rounded-xl px-[2rem] py-[1rem] bg-[#765EA5] text-white font-normal text-[1.8rem] w-full cursor-pointer 
+        className={`rounded-xl px-[2rem] py-[1rem] bg-[#765EA5] text-white font-normal text-[2rem] w-full cursor-pointer 
         hover:opacity-[0.8] transition-all duration-[0.2s] ease-in-out`}
       >
         {btnIcon}&nbsp; {btnTitle}

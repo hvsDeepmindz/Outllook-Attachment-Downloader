@@ -2,11 +2,14 @@ import React from "react";
 import ViewBtn from "../../Components/Btns/ViewBtn";
 import LinkBtn from "../../Components/Btns/LinkBtn";
 import ActionBtn from "../../Components/Btns/ActionBtn";
+import DashboardDownloads from "./DashboardDownloads";
+import DashboardUploads from "./DashboardUploads";
+import DashboardMail from "./DashboardMail";
 
 const DashboardMain = () => {
   return (
     <>
-      <div
+      <section
         className={`px-[10rem] py-[6rem] w-full relative object-cover max-md:px-[2rem] flex justify-between items-start 
         gap-[8rem]`}
       >
@@ -63,7 +66,15 @@ const DashboardMain = () => {
             btnIcon={<i className="fa-solid fa-rotate" />}
           />
         </div>
-      </div>
+      </section>
+
+      <section
+        className={`px-[10rem] py-[6rem] relative object-cover w-full grid grid-cols-3 gap-[4rem] justify-center`}
+      >
+        <DashboardDownloads />
+        <DashboardUploads />
+        <DashboardMail />
+      </section>
     </>
   );
 };

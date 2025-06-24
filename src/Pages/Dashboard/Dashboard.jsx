@@ -6,7 +6,7 @@ const Dashboard = () => {
   return (
     <>
       <Nav />
-      <div className={`relative object-cover w-full mt-[8rem] bg-[#f2f2f2]`}>
+      <div className={`relative object-cover w-full mt-[9rem] bg-[#f2f2f2]`}>
         <DashboardMain />
       </div>
     </>

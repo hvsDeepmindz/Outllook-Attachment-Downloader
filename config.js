@@ -1,1 +1,1 @@
-export const userLogin = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/auth/login`;
+export const userLogin = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/auth/ms-login`;

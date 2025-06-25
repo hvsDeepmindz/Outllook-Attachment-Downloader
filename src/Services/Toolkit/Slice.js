@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoading: false,
-  isAuthenticated: false,
+  isGroupVisible: false,
 };
 
 const Slice = createSlice({
@@ -13,11 +13,12 @@ const Slice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
-    setIsAuthenticated: (state, action) => {
-      state.isAuthenticated = action.payload;
+    setIsGroupVisible: (state, action) => {
+      state.isGroupVisible = action.payload;
     },
   },
 });
 
-export const { setLoading, setIsAuthenticated } = Slice.actions;
+export const { setLoading, setIsGroupVisible } =
+  Slice.actions;
 export default Slice.reducer;

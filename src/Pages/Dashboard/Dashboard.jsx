@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Nav from "../../Components/Header/Nav";
 import DashboardMain from "../../Features/FeatureDashboard/DashboardMain";
 
 const Dashboard = () => {
+  useEffect(() => {
+    console.log(`Testing`);
+  }, []);
+
   return (
     <>
       <Nav />

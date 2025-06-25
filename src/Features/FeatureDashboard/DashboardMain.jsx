@@ -5,6 +5,7 @@ import ActionBtn from "../../Components/Btns/ActionBtn";
 import DashboardDownloads from "./DashboardDownloads";
 import DashboardUploads from "./DashboardUploads";
 import DashboardMail from "./DashboardMail";
+import DashboardAttachments from "./DashboardAttachments";
 
 const DashboardMain = () => {
   return (
@@ -74,6 +75,12 @@ const DashboardMain = () => {
         <DashboardDownloads />
         <DashboardUploads />
         <DashboardMail />
+      </section>
+
+      <section
+        className={`pt-[0] pb-[6rem] px-[10rem] relative object-cover w-auto grid justify-start`}
+      >
+        <DashboardAttachments />
       </section>
     </>
   );

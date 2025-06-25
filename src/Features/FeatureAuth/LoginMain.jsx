@@ -1,12 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
 import AuthBtn from "../../Components/Btns/AuthBtn";
-import { userLogin } from "../../../config";
 import Handlers from "../../Services/Toolkit/Handlers";
-import { Navigate } from "react-router-dom";
 
 const LoginMain = () => {
-  const { isAuthenticated, handleLogin } = Handlers();
+  const { handleLogin } = Handlers();
 
   return (
     <div className={`w-full object-cover relative`}>

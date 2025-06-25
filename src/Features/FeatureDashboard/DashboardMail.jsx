@@ -2,15 +2,12 @@
 import { Progress, Tooltip } from "antd";
 import React from "react";
 import ProgressDesign from "../../Components/Design/ProgressDesign";
-import Handlers from "../../Services/Toolkit/Handlers";
 
 const DashboardMail = () => {
-  const { handleLoad } = Handlers();
-
   return (
     <>
       <div
-        className={`bg-white relative object-cover px-[3rem] py-[3rem] rounded-xl flex flex-col gap-[3rem] shadow-md`}
+        className={`bg-white relative object-cover px-[3rem] py-[3rem] rounded-xl flex flex-col gap-[3rem] shadow-md transition-all duration-[0.4s] ease-in-out hover:translate-y-[-1rem] cursor-pointer`}
       >
         <div className={`flex justify-between items-center gap-[2rem] w-full`}>
           <div className={`flex items-center gap-[2rem]`}>
@@ -23,7 +20,7 @@ const DashboardMail = () => {
                 className="w-[24px] h-[24px] object-cover"
               />
             </div>
-            <h2 className="text-[2.2rem] font-medium text-[#4D4D4D]">
+            <h2 className="text-[2.2rem] font-semibold text-[#4D4D4D]">
               Total Mail
             </h2>
           </div>

@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading, setIsAuthenticated } from "./Slice";
+import { setLoading, setIsGroupVisible } from "./Slice";
 import { useEffect } from "react";
 import { userLogin } from "../../../config";
 
 const Handlers = () => {
   const dispatch = useDispatch();
-  const { isLoading, isAuthenticated } = useSelector((state) => state.app);
+  const { isLoading, isGroupVisible } = useSelector((state) => state.app);
 
   const handleLoad = () => {
     dispatch(setLoading(true));
@@ -19,33 +19,21 @@ const Handlers = () => {
     window.location.href = userLogin;
   };
 
-  const handleAuthCheck = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const response = urlParams.get("response");
-
-    if (response) {
-      try {
-        const successResponse = JSON.parse(decodeURIComponent(response));
-        if (successResponse.successful) {
-          localStorage.setItem("userId", successResponse.user_id);
-          dispatch(setIsAuthenticated(true));
-        }
-      } catch (error) {
-        console.error("Error parsing response:", error);
-      }
-    }
+  const showGroupMenu = () => {
+    dispatch(setIsGroupVisible(true));
   };
 
-  useEffect(() => {
-    handleAuthCheck();
-  }, []);
+  const hideGroupMenu = () => {
+    dispatch(setIsGroupVisible(false));
+  };
 
   return {
     isLoading,
-    isAuthenticated,
     handleLoad,
     handleLogin,
-    handleAuthCheck,
+    isGroupVisible,
+    showGroupMenu,
+    hideGroupMenu,
   };
 };
 

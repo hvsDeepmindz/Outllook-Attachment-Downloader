@@ -1,9 +1,16 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Handlers from "../../Services/Toolkit/Handlers";
 
 const Nav = () => {
-  const { isGroupVisible, showGroupMenu, hideGroupMenu } = Handlers();
+  const {
+    isGroupVisible,
+    showGroupMenu,
+    hideGroupMenu,
+    dashboardData,
+    getInitials,
+  } = Handlers();
   const navigate = useNavigate();
 
   return (
@@ -22,7 +29,9 @@ const Nav = () => {
 
       <div className="relative cursor-pointer" onMouseEnter={showGroupMenu}>
         <div className="flex justify-end bg-[#624D8A] px-[0.8rem] py-[0.5rem] w-auto rounded-full">
-          <p className="text-[2.5rem] text-white">BR</p>
+          <p className="text-[2.5rem] text-white">
+            {getInitials(dashboardData?.user_name)}
+          </p>
         </div>
 
         <div
@@ -43,14 +52,16 @@ const Nav = () => {
             </button>
             <div className="flex items-center justify-start gap-[1rem] mt-[2rem]">
               <div className="bg-[#624D8A] rounded-full px-[1.2rem] py-[1rem]">
-                <p className="text-white text-[2rem] font-normal">BR</p>
+                <p className="text-white text-[2rem] font-normal">
+                  {getInitials(dashboardData?.user_name)}
+                </p>
               </div>
               <div className="flex flex-col gap-[0.5rem]">
                 <h2 className="text-[2.5rem] text-[#4D4D4D] font-medium">
-                  Bhumika Rawat
+                  {dashboardData?.user_name}
                 </h2>
                 <p className="text-[1.8rem] font-normal text-[#666666]">
-                  Bhumikarawat.br0@gmail.com
+                  {dashboardData?.user_mail}
                 </p>
               </div>
             </div>

@@ -51,6 +51,11 @@ body {
   animation: glow 1.5s ease-in-out infinite;
 }
 
+.custom-toast-container {
+  font-size: 1.6rem;
+  line-height: 1.5;
+}
+
 @media(max-width: 1500px) {
   html {
     font-size: 60%;

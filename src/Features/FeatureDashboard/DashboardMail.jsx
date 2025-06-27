@@ -7,8 +7,8 @@ const DashboardMail = () => {
   const { dashboardData } = Handlers();
   const mailData = dashboardData?.mail_data || {
     total: 0,
-    success: 0,
-    pending: 0,
+    with_attachments: 0,
+    without_attachments: 0,
   };
 
   return (
@@ -40,8 +40,9 @@ const DashboardMail = () => {
       <div className="flex justify-between w-full items-start px-[2rem]">
         <ProgressDesign
           progressTitle="Mail"
-          progressPercent={mailData.pending}
-          progressPercentDone={mailData.success}
+          progressPercentDone={mailData?.with_attachments}
+          progressPercent={mailData?.without_attachments}
+          progressTotal={mailData?.total}
           progressColor="#A6B7D3"
           progressDoneColor="#6B76A0"
           progressFailedColor="#F5222D"
@@ -56,7 +57,7 @@ const DashboardMail = () => {
                 With Attachments
               </p>
               <p className="text-[1.8rem] font-normal text-[#4D4D4D]">
-                {mailData.success}
+                {mailData?.with_attachments}
               </p>
             </div>
           </div>
@@ -67,7 +68,7 @@ const DashboardMail = () => {
                 Without Attachments
               </p>
               <p className="text-[1.8rem] font-normal text-[#4D4D4D]">
-                {mailData.pending}
+                {mailData?.without_attachments}
               </p>
             </div>
           </div>

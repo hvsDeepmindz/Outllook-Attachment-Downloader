@@ -11,35 +11,31 @@ const ProgressDesign = ({
   progressSize,
   progressWidth,
   progressFailedColor,
+  progressTotal,
 }) => {
   const radius = progressSize / 2 - 10;
   const circumference = 2 * Math.PI * radius;
-
-  const total =
-    Number(progressPercentDone) +
-    Number(progressPercent) +
-    Number(progressPercentFailed);
 
   const segments = [];
 
   if (progressPercentFailed > 0) {
     segments.push({
       color: progressFailedColor,
-      proportion: progressPercentFailed / total,
+      proportion: progressPercentFailed / progressTotal,
     });
   }
 
   if (progressPercent > 0) {
     segments.push({
       color: progressColor,
-      proportion: progressPercent / total,
+      proportion: progressPercent / progressTotal,
     });
   }
 
   if (progressPercentDone > 0) {
     segments.push({
       color: progressDoneColor,
-      proportion: progressPercentDone / total,
+      proportion: progressPercentDone / progressTotal,
     });
   }
 
@@ -84,7 +80,9 @@ const ProgressDesign = ({
         })}
       </svg>
       <div className="absolute text-center">
-        <p className="text-[2.5rem] font-medium text-[#4D4D4D]">{total}</p>
+        <p className="text-[2.5rem] font-medium text-[#4D4D4D]">
+          {progressTotal}
+        </p>
       </div>
       <Tooltip title={progressTitle}>
         <div className="absolute inset-0 flex items-center justify-center pointer-events-auto" />

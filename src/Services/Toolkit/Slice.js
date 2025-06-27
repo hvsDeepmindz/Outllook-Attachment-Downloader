@@ -6,6 +6,11 @@ const initialState = {
   isGroupVisible: false,
   dashboardData: null,
   showDashboard: false,
+  currentPage: 1,
+  itemsPerPage: 10,
+  tableData: [],
+  messageData: [],
+  totalMessageCount: 0,
 };
 
 const Slice = createSlice({
@@ -24,6 +29,19 @@ const Slice = createSlice({
     setShowDashboard: (state, action) => {
       state.showDashboard = action.payload;
     },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
+    },
+    setItemsPerPage: (state, action) => {
+      state.itemsPerPage = action.payload;
+    },
+    setTableData: (state, action) => {
+      state.tableData = action.payload;
+    },
+    setMessageData: (state, action) => {
+      state.messageData = action.payload.data;
+      state.totalMessageCount = action.payload.total;
+    },
   },
 });
 
@@ -32,5 +50,9 @@ export const {
   setIsGroupVisible,
   setDashboardData,
   setShowDashboard,
+  setCurrentPage,
+  setItemsPerPage,
+  setTableData,
+  setMessageData,
 } = Slice.actions;
 export default Slice.reducer;

@@ -8,7 +8,7 @@ const Attachments = () => {
     <>
       <Nav />
       <div className={`relative object-cover w-full h-full mt-[9rem] bg-[#f2f2f2]`}>
-        <SearchFilter pageTitle={"Attachments"} />
+        <SearchFilter pageTitle={"Attachments"} filterView={false}/>
         <AttachmentsMain />
       </div>
     </>

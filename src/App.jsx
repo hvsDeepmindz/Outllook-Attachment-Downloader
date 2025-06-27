@@ -4,6 +4,7 @@ import Login from "./Pages/Auth/Login";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import LoginSuccess from "./Pages/Auth/LoginSuccess";
 import Attachments from "./Pages/Attachments/Attachments";
+import Messages from "./Pages/Messages/Messages";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             <Route path="/loginsuccess" element={<LoginSuccess />}></Route>
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/attachments" element={<Attachments />}></Route>
+            <Route path="/messages" element={<Messages />}></Route>
           </Routes>
         </div>
       </BrowserRouter>

@@ -11,17 +11,8 @@ import Handlers from "../../Services/Toolkit/Handlers";
 import { useNavigate } from "react-router-dom";
 
 const DashboardMain = () => {
-  const {
-    fetchDashboardData,
-    isLoading,
-    dashboardData,
-    getInitials,
-    showDashboard,
-  } = Handlers();
-
+  const { isLoading, dashboardData, getInitials, showDashboard } = Handlers();
   const navigate = useNavigate();
-
-  if (!showDashboard) return null;
 
   return (
     <>
@@ -52,6 +43,9 @@ const DashboardMain = () => {
               <div className={`w-auto`}>
                 <ViewBtn
                   btnTitle={"Messages"}
+                  btnFunc={() => {
+                    navigate("/messages");
+                  }}
                   btnIcon={<i className="fa-regular fa-envelope" />}
                 />
               </div>
@@ -70,9 +64,6 @@ const DashboardMain = () => {
                   btnIcon={<i className="fa-regular fa-clone" />}
                 />
               </div>
-            </div>
-            <div className={`flex justify-end cursor-pointer`}>
-              <i className="fa-regular fa-trash-can text-[2.5rem] text-[grey]" />
             </div>
           </div>
           <div className={`flex justify-end`}>

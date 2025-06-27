@@ -42,7 +42,7 @@ const DashboardDownloads = () => {
           progressTitle="Downloads"
           progressPercent={downloadData.pending}
           progressPercentDone={downloadData.success}
-          progressPercentFailed={0}
+          progressTotal={downloadData.total}
           progressColor="#FAAD14"
           progressDoneColor="#52C41A"
           progressFailedColor="#F5222D"

@@ -43,6 +43,7 @@ const DashboardUploads = () => {
           progressPercent={uploadData.pending}
           progressPercentDone={uploadData.success}
           progressPercentFailed={uploadData.failed}
+          progressTotal={uploadData?.total}
           progressColor="#FAAD14"
           progressDoneColor="#52C41A"
           progressFailedColor="#F5222D"

@@ -20,10 +20,18 @@ const Dashboard = () => {
         position="top-center"
         className={`custom-toast-container`}
       />
-      <Nav />
-      <div className={`relative object-cover w-full mt-[9rem] bg-[#f2f2f2]`}>
-        {showDashboard ? <DashboardMain /> : <APIErrorView />}
-      </div>
+      {showDashboard ? (
+        <>
+          <Nav />
+          <div
+            className={`relative object-cover w-full mt-[9rem] bg-[#f2f2f2]`}
+          >
+            <DashboardMain />
+          </div>
+        </>
+      ) : (
+        <APIErrorView />
+      )}
     </>
   );
 };

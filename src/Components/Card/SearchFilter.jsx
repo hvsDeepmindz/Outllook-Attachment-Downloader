@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const SearchFilter = ({ pageTitle, filterView }) => {
+const SearchFilter = ({
+  pageTitle,
+  filterView,
+  searchText,
+  onSearchChange,
+  onSearchSubmit,
+}) => {
   return (
     <>
       <div
@@ -30,19 +36,23 @@ const SearchFilter = ({ pageTitle, filterView }) => {
         </div>
 
         {/* Search Bar */}
-        <div
-          className={`flex justify-end w-auto items-center gap-[2rem]`}
-        >
+        <div className={`flex justify-end w-auto items-center gap-[2rem]`}>
           <div
             className={`flex items-center gap-[1rem] px-[2rem] py-[1rem] border-[1px] border-[#d2d2d2] rounded-xl bg-transparent w-[330px]`}
           >
             <input
               type="text"
-              name="search"
-              id="search"
-              className={`text-[#939393] placeholder:text-[#939393] font-normal text-[1.8rem] w-full outline-none border-none bg-transparent`}
+              value={searchText}
+              onChange={(e) => onSearchChange(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  onSearchSubmit();
+                }
+              }}
+              className="text-[#939393] placeholder:text-[#939393] font-normal text-[1.8rem] w-full outline-none border-none bg-transparent"
               placeholder="Search by Name, Email, and Date"
             />
+
             <img
               src="/Media/search.png"
               alt="search"

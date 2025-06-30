@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import Handlers from "../../Services/Toolkit/Handlers";
 
@@ -6,6 +7,7 @@ const Table = ({ tableTitle, columns, data }) => {
     currentPage,
     itemsPerPage,
     totalPages,
+    totalItems,
     startIndex,
     endIndex,
     paginatedData,
@@ -116,8 +118,8 @@ const Table = ({ tableTitle, columns, data }) => {
           </select>
         </div>
         <span className={`text-[1.6rem] text-black font-normal`}>
-          {startIndex + 1} - {Math.min(endIndex, data?.length || 0)}{" "}
-          <span className={`text-[grey]`}>Out of {data?.length || 0}</span>
+          {startIndex + 1} - {Math.min(endIndex, totalItems)}{" "}
+          <span className={`text-[grey]`}>Out of {totalItems}</span>
         </span>
         <div className={`flex items-center gap-[0.2rem]`}>
           <button

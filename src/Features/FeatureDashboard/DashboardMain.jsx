@@ -9,10 +9,18 @@ import DashboardMail from "./DashboardMail";
 import DashboardAttachments from "./DashboardAttachments";
 import Handlers from "../../Services/Toolkit/Handlers";
 import { useNavigate } from "react-router-dom";
+import { LuLoaderCircle } from "react-icons/lu";
 
 const DashboardMain = () => {
-  const { isLoading, dashboardData, getInitials, showDashboard } = Handlers();
+  const {
+    isLoading,
+    dashboardData,
+    getInitials,
+    fetchSyncData,
+    syncPendingItems,
+  } = Handlers();
   const navigate = useNavigate();
+  console.log("syncPendingItems : ", syncPendingItems);
 
   return (
     <>
@@ -74,8 +82,22 @@ const DashboardMain = () => {
         </div>
         <div className={`w-auto justify-end`}>
           <ViewBtn
-            btnTitle={"Sync"}
-            btnIcon={<i className="fa-solid fa-rotate" />}
+            btnTitle={
+              isLoading && syncPendingItems > 0
+                ? `Syncing ${syncPendingItems} items...`
+                : isLoading
+                ? "Syncing..."
+                : "Sync"
+            }
+            btnFunc={fetchSyncData}
+            btnIcon={
+              isLoading ? (
+                <i className="fa-solid fa-rotate animate-spin" />
+              ) : (
+                <i className="fa-solid fa-rotate" />
+              ) 
+            }
+            btnDisable={isLoading}
           />
         </div>
       </section>

@@ -9,12 +9,26 @@ import APIErrorView from "../../Components/Error/APIErrorView";
 
 const Messages = () => {
   const {
-    messageData,
+    dashboardData,
+    messageTableData,
+    fetchDashboardData,
     fetchMessageData,
     itemsPerPage,
     currentPage,
     showDashboard,
+    totalItems,
+    totalPages,
+    searchText,
+    handleSearchTextChange,
+    handleSearchSubmit,
   } = Handlers();
+
+  useEffect(() => {
+    if (!dashboardData?.user_name || !dashboardData?.user_mail) {
+      fetchDashboardData();
+    }
+    fetchMessageData(currentPage, itemsPerPage);
+  }, []);
 
   const columns = [
     { header: "Name", accessor: (row) => row.sender_name },
@@ -22,54 +36,40 @@ const Messages = () => {
     { header: "Subject", accessor: (row) => row.subject },
     {
       header: "Date",
-      accessor: (row) => row.received_datetime,
+      accessor: (row) => new Date(row.received_datetime).toLocaleString(),
     },
   ];
 
-  useEffect(() => {
-    fetchMessageData(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage]);
-
   const primaryKeys = ["sender_name", "sender_mail", "subject"];
   const columnsAll =
-    messageData.length > 0
+    messageTableData.length > 0
       ? [
           ...primaryKeys,
-          ...Object.keys(messageData[0]).filter(
+          ...Object.keys(messageTableData[0]).filter(
             (key) => !primaryKeys.includes(key)
           ),
         ].map((key) => ({
           header: key
             .replaceAll("_", " ")
-            .replace(/\b\w/g, (char) => char.toUpperCase()),
+            .replace(/\b\w/g, (c) => c.toUpperCase()),
           accessor: (row) => {
             const value = row[key];
-            if (key === "sender_name") {
+            if (key === "sender_name" || key === "subject") {
               const words = value?.split(" ") || [];
+              const limit = key === "subject" ? 4 : 8;
               const display =
-                words.length > 6 ? words.slice(0, 8).join(" ") + "..." : value;
+                words.length > limit
+                  ? words.slice(0, limit).join(" ") + "..."
+                  : value;
               return (
                 <Tooltip title={value}>
                   <span>{display}</span>
                 </Tooltip>
               );
             }
-            if (key === "subject") {
-              const words = value?.split(" ") || [];
-              const display =
-                words.length > 4 ? words.slice(0, 4).join(" ") + "..." : value;
-              return (
-                <Tooltip title={value}>
-                  <span>{display}</span>
-                </Tooltip>
-              );
-            }
-            if (key.includes("datetime")) {
+            if (key.includes("datetime"))
               return new Date(value).toLocaleDateString();
-            }
-            if (typeof value === "boolean") {
-              return value ? "Yes" : "No";
-            }
+            if (typeof value === "boolean") return value ? "Yes" : "No";
             return value;
           },
         }))
@@ -81,11 +81,20 @@ const Messages = () => {
         <>
           <Nav />
           <div className="relative object-cover w-full h-full mt-[9rem] bg-[#f2f2f2]">
-            <SearchFilter pageTitle="Messages" filterView={true} />
+            <SearchFilter
+              pageTitle="Messages"
+              filterView={true}
+              searchText={searchText}
+              onSearchChange={handleSearchTextChange}
+              onSearchSubmit={handleSearchSubmit}
+            />
             <Table
               tableTitle="Messages Table"
               columns={columns}
-              data={messageData}
+              data={{
+                table_data: messageTableData,
+                meta_data: { total_items: totalItems, total_pages: totalPages },
+              }}
             />
           </div>
         </>

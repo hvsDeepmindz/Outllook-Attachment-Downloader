@@ -8,9 +8,11 @@ const initialState = {
   showDashboard: false,
   currentPage: 1,
   itemsPerPage: 10,
-  tableData: [],
-  messageData: [],
-  totalMessageCount: 0,
+  messageTableData: [],
+  totalItems: 0,
+  totalPages: 0,
+  syncPendingItems: 0,
+  searchText: "",
 };
 
 const Slice = createSlice({
@@ -35,12 +37,16 @@ const Slice = createSlice({
     setItemsPerPage: (state, action) => {
       state.itemsPerPage = action.payload;
     },
-    setTableData: (state, action) => {
-      state.tableData = action.payload;
+    setMessageTableData: (state, action) => {
+      state.messageTableData = action.payload.table_data || [];
+      state.totalItems = action.payload.meta_data?.total_items || 0;
+      state.totalPages = action.payload.meta_data?.total_pages || 0;
     },
-    setMessageData: (state, action) => {
-      state.messageData = action.payload.data;
-      state.totalMessageCount = action.payload.total;
+    setSyncPendingItems: (state, action) => {
+      state.syncPendingItems = action.payload;
+    },
+    setSearchText: (state, action) => {
+      state.searchText = action.payload;
     },
   },
 });
@@ -52,7 +58,8 @@ export const {
   setShowDashboard,
   setCurrentPage,
   setItemsPerPage,
-  setTableData,
-  setMessageData,
+  setMessageTableData,
+  setSyncPendingItems,
+  setSearchText,
 } = Slice.actions;
 export default Slice.reducer;

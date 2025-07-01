@@ -13,6 +13,9 @@ const initialState = {
   totalPages: 0,
   syncPendingItems: 0,
   searchText: "",
+  selectedAttachment: "",
+  historyStack: [],
+  attachmentTableData: [],
 };
 
 const Slice = createSlice({
@@ -48,6 +51,21 @@ const Slice = createSlice({
     setSearchText: (state, action) => {
       state.searchText = action.payload;
     },
+    setSelectedAttachment: (state, action) => {
+      state.selectedAttachment = action.payload;
+    },
+    setHistoryStack: (state, action) => {
+      state.historyStack = action.payload;
+    },
+    pushToHistoryStack: (state, action) => {
+      state.historyStack.push(action.payload);
+    },
+    popFromHistoryStack: (state) => {
+      state.historyStack.pop();
+    },
+    setAttachmentTableData: (state, action) => {
+      state.attachmentTableData = action.payload;
+    },
   },
 });
 
@@ -61,5 +79,10 @@ export const {
   setMessageTableData,
   setSyncPendingItems,
   setSearchText,
+  setSelectedAttachment,
+  setHistoryStack,
+  pushToHistoryStack,
+  popFromHistoryStack,
+  setAttachmentTableData,
 } = Slice.actions;
 export default Slice.reducer;

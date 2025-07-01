@@ -19,8 +19,11 @@ const DashboardMain = () => {
     fetchSyncData,
     syncPendingItems,
   } = Handlers();
+
   const navigate = useNavigate();
-  console.log("syncPendingItems : ", syncPendingItems);
+  useEffect(() => {
+    console.log("syncPendingItems:", syncPendingItems);
+  }, [syncPendingItems]);
 
   return (
     <>
@@ -83,21 +86,21 @@ const DashboardMain = () => {
         <div className={`w-auto justify-end`}>
           <ViewBtn
             btnTitle={
-              isLoading && syncPendingItems > 0
-                ? `Syncing ${syncPendingItems} items...`
-                : isLoading
-                ? "Syncing..."
+              syncPendingItems > 0
+                ? `Syncing ${syncPendingItems} item${
+                    syncPendingItems > 1 ? "s" : ""
+                  }...`
                 : "Sync"
             }
-            btnFunc={fetchSyncData}
+            btnFunc={syncPendingItems > 0 ? undefined : fetchSyncData}
             btnIcon={
-              isLoading ? (
+              syncPendingItems > 0 ? (
                 <i className="fa-solid fa-rotate animate-spin" />
               ) : (
                 <i className="fa-solid fa-rotate" />
-              ) 
+              )
             }
-            btnDisable={isLoading}
+            btnDisable={syncPendingItems > 0}
           />
         </div>
       </section>

@@ -5,6 +5,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import LoginSuccess from "./Pages/Auth/LoginSuccess";
 import Attachments from "./Pages/Attachments/Attachments";
 import Messages from "./Pages/Messages/Messages";
+import AttachmentView from "./Features/FeatureAttachments/AttachmentView";
 
 const App = () => {
   return (
@@ -18,6 +19,8 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />}></Route>
             <Route path="/attachments" element={<Attachments />}></Route>
             <Route path="/messages" element={<Messages />}></Route>
+            <Route path="/attachments" element={<Attachments />} />
+            <Route path="/attachments/:title" element={<AttachmentView />} />
           </Routes>
         </div>
       </BrowserRouter>

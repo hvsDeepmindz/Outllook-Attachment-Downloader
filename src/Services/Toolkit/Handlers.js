@@ -10,6 +10,11 @@ import {
   setMessageTableData,
   setSyncPendingItems,
   setSearchText,
+  setSelectedAttachment,
+  setHistoryStack,
+  pushToHistoryStack,
+  popFromHistoryStack,
+  setAttachmentTableData,
 } from "./Slice";
 import { useEffect } from "react";
 import { userLogin, userLogout } from "../../../config";
@@ -19,6 +24,7 @@ import { MessageData } from "../APIs/MessagesAPI";
 import { useNavigate } from "react-router-dom";
 import { SyncData, SyncStatus } from "../APIs/SyncAPI";
 import { SearchMessage } from "../APIs/SearchMessageAPI";
+import { AttachmentTableData } from "../APIs/AttachmentAPI";
 
 const Handlers = () => {
   const dispatch = useDispatch();
@@ -36,6 +42,9 @@ const Handlers = () => {
     totalPages,
     syncPendingItems,
     searchText,
+    selectedAttachment,
+    historyStack,
+    attachmentTableData,
   } = useSelector((state) => state.app);
 
   const handleLoad = () => {
@@ -127,33 +136,40 @@ const Handlers = () => {
   };
 
   const fetchSyncData = async () => {
+    dispatch(setLoading(true));
     try {
-      const initialStatus = await SyncStatus();
-      const syncedBefore = initialStatus?.total_synced_items || 0;
-      dispatch(setSyncPendingItems(initialStatus?.total_items - syncedBefore));
-      await new Promise((res) => setTimeout(res, 0));
-      dispatch(setLoading(true));
+      const initial = await SyncStatus();
+      const total = initial?.total_items || 0;
+      const synced = initial?.total_synced_items || 0;
+      const pending = Math.max(total - synced, 0);
+      dispatch(setSyncPendingItems(pending));
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-      await SyncData();
+      const result = await SyncData();
+      const newSynced = result?.total_synced_items || 0;
+      const newPending = total - newSynced;
 
-      const finalStatus = await SyncStatus();
-      const syncedAfter = finalStatus?.total_synced_items || 0;
-      const newlySynced = Math.max(syncedAfter - syncedBefore, 0);
+      dispatch(setSyncPendingItems(newPending));
 
-      if (newlySynced > 0) {
-        toast.success(`Synced ${newlySynced} items successfully...`);
+      if (newSynced > synced) {
+        toast.success(`Synced ${newSynced - synced} items successfully`);
       } else {
         toast.info("Already up to date");
       }
-
       fetchDashboardData();
     } catch {
       toast.error("Sync failed");
     } finally {
       dispatch(setLoading(false));
-      dispatch(setSyncPendingItems(0));
     }
   };
+
+  const fetchAttachmentTableData = (file) => async (dispatch) => {
+    const res = await AttachmentTableData(file);
+    dispatch(setAttachmentTableData(res));
+  };
+
+  // End fetch API func
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -175,17 +191,47 @@ const Handlers = () => {
     }
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = async (page) => {
     if (page > 0 && page <= totalPages) {
       dispatch(setCurrentPage(page));
-      fetchMessageData(page, itemsPerPage);
+      dispatch(setLoading(true));
+
+      if (searchText.trim() !== "") {
+        const res = await SearchMessage({
+          text: searchText,
+          currentPage: page,
+          itemsPerPage,
+        });
+        if (res?.table_data) {
+          dispatch(setMessageTableData(res));
+        }
+      } else {
+        await fetchMessageData(page, itemsPerPage);
+      }
+
+      dispatch(setLoading(false));
     }
   };
 
-  const handleItemsPerPageChange = (value) => {
+  const handleItemsPerPageChange = async (value) => {
     dispatch(setItemsPerPage(value));
     dispatch(setCurrentPage(1));
-    fetchMessageData(1, value);
+    dispatch(setLoading(true));
+
+    if (searchText.trim() !== "") {
+      const res = await SearchMessage({
+        text: searchText,
+        currentPage: 1,
+        itemsPerPage: value,
+      });
+      if (res?.table_data) {
+        dispatch(setMessageTableData(res));
+      }
+    } else {
+      await fetchMessageData(1, value);
+    }
+
+    dispatch(setLoading(false));
   };
 
   const handleSearchTextChange = (text) => {
@@ -208,6 +254,22 @@ const Handlers = () => {
       dispatch(setCurrentPage(1));
     }
     dispatch(setLoading(false));
+  };
+
+  const pushHistory = (path) => {
+    dispatch(pushToHistoryStack(path));
+  };
+
+  const popHistory = () => {
+    dispatch(popFromHistoryStack());
+    const prevPath = historyStack[historyStack.length - 2] || "/dashboard";
+    navigate(prevPath);
+  };
+
+  const handleAttachmentSelect = (title) => {
+    dispatch(setSelectedAttachment(title));
+    pushHistory(`/attachments/${title}`);
+    navigate(`/attachments/${title}`);
   };
 
   return {
@@ -236,10 +298,17 @@ const Handlers = () => {
     searchText,
     handleSearchTextChange,
     handleSearchSubmit,
+    selectedAttachment,
+    handleAttachmentSelect,
+    historyStack,
+    pushHistory,
+    popHistory,
+    attachmentTableData,
     // Api func
     fetchDashboardData,
     fetchMessageData,
     fetchSyncData,
+    fetchAttachmentTableData,
   };
 };
 

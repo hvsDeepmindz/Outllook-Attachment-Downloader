@@ -85,6 +85,7 @@ const Messages = () => {
               pageTitle="Messages"
               filterView={true}
               searchText={searchText}
+              attachmentView={false}
               onSearchChange={handleSearchTextChange}
               onSearchSubmit={handleSearchSubmit}
             />

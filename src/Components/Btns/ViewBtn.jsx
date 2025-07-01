@@ -7,8 +7,9 @@ const ViewBtn = ({ btnTitle, btnFunc, btnIcon, btnDisable }) => {
       <button
         onClick={btnFunc}
         disabled={btnDisable}
-        className={`rounded-xl px-[2rem] py-[1rem] bg-[#765EA5] text-white font-normal text-[2rem] w-full cursor-pointer 
-        hover:opacity-[0.8] transition-all duration-[0.2s] ease-in-out`}
+        className={`rounded-xl px-[2rem] py-[1rem] bg-[#765EA5] text-white font-normal text-[2rem] w-full hover:opacity-[0.8] transition-all duration-[0.2s] ease-in-out ${
+          btnDisable ? "cursor-not-allowed" : "cursor-pointer "
+        }`}
       >
         {btnIcon}&nbsp; {btnTitle}
       </button>
@@ -17,3 +18,4 @@ const ViewBtn = ({ btnTitle, btnFunc, btnIcon, btnDisable }) => {
 };
 
 export default ViewBtn;
+  

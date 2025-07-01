@@ -10,6 +10,7 @@ export const AttachmentTableData = async (file) => {
         headers: {
           accept: "application/json",
         },
+        withCredentials: true,
       }
     );
     return response?.data || [];

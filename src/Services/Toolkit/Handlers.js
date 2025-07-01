@@ -14,7 +14,6 @@ import {
   setHistoryStack,
   pushToHistoryStack,
   popFromHistoryStack,
-  setAttachmentTableData,
 } from "./Slice";
 import { useEffect } from "react";
 import { userLogin, userLogout } from "../../../config";
@@ -24,7 +23,6 @@ import { MessageData } from "../APIs/MessagesAPI";
 import { useNavigate } from "react-router-dom";
 import { SyncData, SyncStatus } from "../APIs/SyncAPI";
 import { SearchMessage } from "../APIs/SearchMessageAPI";
-import { AttachmentTableData } from "../APIs/AttachmentAPI";
 
 const Handlers = () => {
   const dispatch = useDispatch();
@@ -44,7 +42,6 @@ const Handlers = () => {
     searchText,
     selectedAttachment,
     historyStack,
-    attachmentTableData,
   } = useSelector((state) => state.app);
 
   const handleLoad = () => {
@@ -162,11 +159,6 @@ const Handlers = () => {
     } finally {
       dispatch(setLoading(false));
     }
-  };
-
-  const fetchAttachmentTableData = (file) => async (dispatch) => {
-    const res = await AttachmentTableData(file);
-    dispatch(setAttachmentTableData(res));
   };
 
   // End fetch API func
@@ -303,12 +295,10 @@ const Handlers = () => {
     historyStack,
     pushHistory,
     popHistory,
-    attachmentTableData,
     // Api func
     fetchDashboardData,
     fetchMessageData,
     fetchSyncData,
-    fetchAttachmentTableData,
   };
 };
 

@@ -1,40 +1,64 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import Handlers from "../../Services/Toolkit/Handlers";
 import Nav from "../../Components/Header/Nav";
 import SearchFilter from "../../Components/Card/SearchFilter";
 import Table from "../../Components/Table/Table";
 import { AttachmentData } from "../../Services/Data/AttachmentData";
+import { AttachmentTableData } from "../../Services/APIs/AttachmentAPI";
+import axios from "axios";
 
 const AttachmentView = () => {
-  const { title } = useParams();
-
-  const {
-    selectedAttachment,
-    handleAttachmentSelect,
-    attachmentTableData,
-    fetchAttachmentTableData,
-  } = Handlers();
+  const { title: value } = useParams();
+  const [tableData, setTableData] = useState([]);
 
   const matchedItem = useMemo(() => {
     return AttachmentData.find(
-      (item) => item.title === decodeURIComponent(title)
+      (item) => item.value === decodeURIComponent(value)
     );
-  }, [title]);
+  }, [value]);
 
-  const matchedValue = matchedItem?.value || "";
-
-  useEffect(() => {
-    if (title && title !== selectedAttachment) {
-      handleAttachmentSelect(decodeURIComponent(title));
-    }
-  }, [title]);
+  const matchedTitle = matchedItem?.title || "Attachments";
 
   useEffect(() => {
-    if (matchedValue) {
-      fetchAttachmentTableData(matchedValue);
+    if (value) {
+      const fetchData = async () => {
+        const res = await AttachmentTableData(decodeURIComponent(value));
+        setTableData(res || []);
+      };
+      fetchData();
     }
-  }, [matchedValue]);
+  }, [value]);
+
+  const handleDownload = async (attachmentId, attachmentName) => {
+    try {
+      const response = await axios.get(
+        `https://buddy.pharynxai.in/api-attachment-downloader-v2/attachment/download`,
+        {
+          params: { attachment_id: attachmentId },
+          responseType: "blob",
+          headers: {},
+          withCredentials: true,
+        }
+      );
+
+      const blob = new Blob([response.data]);
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = attachmentName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+      alert(
+        "Download failed: " + (error.response?.statusText || error.message)
+      );
+    }
+  };
 
   const columns = [
     {
@@ -44,15 +68,40 @@ const AttachmentView = () => {
     {
       header: "Attachment",
       accessor: (row) => (
-        <a
-          href={`/media/attachments/${row.attachment_name}`}
-          className="text-blue-600 underline ml-2"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          className={`flex items-center justify-start bg-[#f1f1f1] border-[1px] border-[#f2f2f2] px-[2rem] py-[0.5rem] rounded-full`}
         >
-          {row.attachment_name}
-        </a>
+          <img
+            src="/Media/doc.png"
+            loading="lazy"
+            className={`w-[16px] h-[16px]`}
+          />
+          &nbsp; {row.attachment_name}
+          <p className="text-blue-600"></p>
+        </button>
       ),
+    },
+    {
+      header: "Download",
+      accessor: (row) =>
+        row.attachment_name ? (
+          <div className="flex items-center gap-3">
+            <img
+              src={`/Media/download.png`}
+              loading="lazy"
+              onClick={() => handleDownload(row.id, row.attachment_name)}
+              className="fa-solid fa-download text-[1.8rem] text-[grey] cursor-pointer bg-[white] border-[1px] border-[#d2d2d2] w-[30px] h-[30px] px-[0.3rem] py-[0.3rem] rounded-md"
+            />
+            <img
+              src={`/Media/upload.png`}
+              loading="lazy"
+              className="fa-solid fa-upload text-[1.8rem] text-[grey] cursor-pointer bg-[white] border-[1px] 
+              border-[#d2d2d2] w-[30px] h-[30px] px-[0.3rem] py-[0.3rem] rounded-md"
+            />
+          </div>
+        ) : (
+          "-"
+        ),
     },
   ];
 
@@ -63,14 +112,12 @@ const AttachmentView = () => {
         <SearchFilter
           pageTitle="Attachments"
           filterView={false}
-          attachmentView={true}
-          selectedAttachment={selectedAttachment}
-          handleAttachmentSelect={handleAttachmentSelect}
+          attachmentView={false}
         />
         <Table
-          tableTitle={`${matchedItem?.title || "Attachments"} Table`}
+          tableTitle={`${matchedTitle} Table`}
           columns={columns}
-          data={attachmentTableData}
+          data={tableData}
         />
       </div>
     </>

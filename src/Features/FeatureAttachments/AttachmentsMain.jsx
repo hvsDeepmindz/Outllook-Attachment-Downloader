@@ -1,20 +1,14 @@
 import React from "react";
 import { AttachmentData } from "../../Services/Data/AttachmentData";
-import Handlers from "../../Services/Toolkit/Handlers";
 import { useNavigate } from "react-router-dom";
 
 const AttachmentsMain = () => {
-  const { handleAttachmentSelect, fetchAttachmentTableData } = Handlers();
   const navigate = useNavigate();
 
   const handleClick = (ele) => {
-    handleAttachmentSelect(ele.title);
-    console.log("ele : ",ele);
-    
     if (ele.value) {
-      fetchAttachmentTableData(ele.value);
+      navigate(`/attachments/${ele.value}`);
     }
-    navigate(`/attachments/${ele.title}`);
   };
 
   return (

@@ -15,7 +15,6 @@ const initialState = {
   searchText: "",
   selectedAttachment: "",
   historyStack: [],
-  attachmentTableData: [],
 };
 
 const Slice = createSlice({
@@ -63,9 +62,6 @@ const Slice = createSlice({
     popFromHistoryStack: (state) => {
       state.historyStack.pop();
     },
-    setAttachmentTableData: (state, action) => {
-      state.attachmentTableData = action.payload;
-    },
   },
 });
 
@@ -83,6 +79,5 @@ export const {
   setHistoryStack,
   pushToHistoryStack,
   popFromHistoryStack,
-  setAttachmentTableData,
 } = Slice.actions;
 export default Slice.reducer;

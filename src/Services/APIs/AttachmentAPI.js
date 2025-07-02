@@ -19,3 +19,16 @@ export const AttachmentTableData = async (file) => {
     return [];
   }
 };
+
+export const DownloadAttachments = async (attachmentId) => {
+  const response = await axios.get(
+    `${import.meta.env.VITE_REACT_APP_BASE_URL}/attachment/download`,
+    {
+      params: { attachment_id: attachmentId },
+      responseType: "blob",
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+};

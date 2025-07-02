@@ -33,6 +33,7 @@ const SearchFilter = ({
             />
             <p className="text-[1.8rem] font-medium text-[#4D4D4D]">Back</p>
           </div>
+
           <div className={`w-[1px] h-[2rem] bg-[grey]`}></div>
           <Link
             to={"/dashboard"}

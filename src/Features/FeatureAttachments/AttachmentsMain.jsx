@@ -1,15 +1,9 @@
 import React from "react";
+import Handlers from "../../Services/Toolkit/Handlers";
 import { AttachmentData } from "../../Services/Data/AttachmentData";
-import { useNavigate } from "react-router-dom";
 
 const AttachmentsMain = () => {
-  const navigate = useNavigate();
-
-  const handleClick = (ele) => {
-    if (ele.value) {
-      navigate(`/attachments/${ele.value}`);
-    }
-  };
+  const { handleAttachmentClick } = Handlers();
 
   return (
     <div className="py-[10rem] px-[10rem] relative object-cover w-full">
@@ -17,7 +11,7 @@ const AttachmentsMain = () => {
         {AttachmentData.map((ele) => (
           <div
             key={ele.id}
-            onClick={() => handleClick(ele)}
+            onClick={() => handleAttachmentClick(ele)}
             className="px-[2rem] py-[2rem] bg-white transition-all duration-300 hover:opacity-80 cursor-pointer rounded-xl flex items-center gap-[2rem] shadow-sm hover:translate-y-[-0.5rem]"
           >
             <div className="w-auto h-auto bg-[#F1EFF8] px-[1rem] py-[1rem] rounded-xl">

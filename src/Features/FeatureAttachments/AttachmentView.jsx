@@ -83,8 +83,8 @@ const AttachmentView = () => {
       <div className="relative object-cover w-full h-full mt-[9rem] bg-[#f2f2f2]">
         <SearchFilter
           pageTitle="Attachments"
-          filterView={false}
-          attachmentView={false}
+          filterView={true}
+          attachmentView={true}
         />
         <Table
           tableTitle={`${finalTitle} Table`}

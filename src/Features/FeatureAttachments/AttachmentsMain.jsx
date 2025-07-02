@@ -6,8 +6,8 @@ const AttachmentsMain = () => {
   const { handleAttachmentClick } = Handlers();
 
   return (
-    <div className="py-[10rem] px-[10rem] relative object-cover w-full">
-      <div className="grid grid-cols-4 gap-[6rem] w-full relative justify-center">
+    <div className="pt-[12rem] px-[10rem] relative object-cover w-full flex justify-center items-center">
+      <div className="grid grid-cols-4 gap-[6rem] w-full relative justify-center items-center">
         {AttachmentData.map((ele) => (
           <div
             key={ele.id}

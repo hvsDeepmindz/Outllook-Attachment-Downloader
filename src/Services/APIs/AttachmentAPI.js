@@ -5,7 +5,7 @@ export const AttachmentTableData = async (file) => {
     const response = await axios.get(
       `${
         import.meta.env.VITE_REACT_APP_BASE_URL
-      }/attachment/table-data?file=${file}`,
+      }/attachment/table-data?target_file=${file}`,
       {
         headers: {
           accept: "application/json",
@@ -31,4 +31,26 @@ export const DownloadAttachments = async (attachmentId) => {
   );
 
   return response.data;
+};
+
+export const DownloadAllAttachments = async (filename) => {
+  const config = {
+    method: "get",
+    url: `${
+      import.meta.env.VITE_REACT_APP_BASE_URL
+    }/attachment/download-all?target_file=${filename}`,
+    headers: {
+      Accept: "application/zip",
+    },
+    responseType: "blob",
+    withCredentials: true,
+  };
+
+  try {
+    const response = await axios.request(config);
+    return new Blob([response.data], { type: "application/zip" });
+  } catch (error) {
+    console.error("Download failed:", error);
+    throw error;
+  }
 };

@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { AttachmentData } from "../../Services/Data/AttachmentData";
 import Handlers from "../../Services/Toolkit/Handlers";
+import { LuLoaderCircle } from "react-icons/lu";
 
 const SearchFilter = ({
   pageTitle,
@@ -13,8 +14,11 @@ const SearchFilter = ({
   onSearchSubmit,
   selectedAttachment,
   handleAttachmentSelect,
+  searchView,
+  attachmentTitle,
+  downloadAll,
 }) => {
-  const { popHistory } = Handlers();
+  const { popHistory, isDownloadingLoad } = Handlers();
 
   return (
     <>
@@ -43,7 +47,8 @@ const SearchFilter = ({
           </Link>
           <p className={`text-[1.8rem] font-normal text-[grey]`}>/</p>
           <p className={`text-[1.8rem] font-normal text-[#4D4D4D]`}>
-            {pageTitle}
+            {attachmentTitle ? "" : pageTitle}{" "}
+            {attachmentTitle ? `${attachmentTitle}` : ""}
           </p>
         </div>
 
@@ -69,11 +74,19 @@ const SearchFilter = ({
           ) : null}
           {attachmentView === true ? (
             <button
-              className={`px-[2rem] py-[1rem] bg-white transition-all duration-[0.2s] ease-in-out hover:opacity-[0.8] rounded-xl border-[1px] border-[#765EA5] text-[#765EA5] font-normal 
-              text-[1.8rem] cursor-pointer`}
+              onClick={downloadAll}
+              className={`px-[2rem] py-[1rem] bg-white transition-all duration-[0.2s] ease-in-out hover:opacity-[0.8] rounded-xl border-[1px] border-[#765EA5] text-[#765EA5] font-normal text-[1.8rem] flex items-center gap-2 ${
+                isDownloadingLoad ? "cursor-not-allowed" : "cursor-pointer "
+              }`}
             >
-              <i className="fa-solid fa-download" />
-              &nbsp; Download All
+              {isDownloadingLoad ? (
+                <LuLoaderCircle className="animate-spin text-[2rem]" />
+              ) : (
+                <>
+                  <i className="fa-solid fa-download" />
+                  <span>Download All</span>
+                </>
+              )}
             </button>
           ) : null}
           {attachmentView === true ? (
@@ -99,7 +112,7 @@ const SearchFilter = ({
                 className="w-[20px] h-[20px]"
               />
             </div>
-          ) : (
+          ) : searchView === true ? (
             <div
               className={`flex items-center gap-[1rem] px-[2rem] py-[1rem] border-[1px] border-[#d2d2d2] rounded-xl bg-transparent w-[330px]`}
             >
@@ -122,7 +135,7 @@ const SearchFilter = ({
                 className="w-[20px] h-[20px]"
               />
             </div>
-          )}
+          ) : null}
           {filterView === true ? (
             <div
               className={`bg-white px-[1rem] py-[1rem] rounded-lg hover:opacity-[0.8] transition-all duration-[0.2s] ease-in-out border-[1px] border-[#765EA5] cursor-pointer`}

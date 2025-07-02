@@ -14,6 +14,11 @@ import {
   popFromHistoryStack,
   setSelectedAttachment,
   setAttachmentTableData,
+  setDownloadingAttachmentId,
+  toggleSelectAttachment,
+  toggleSelectAllAttachments,
+  resetSelectedAttachments,
+  setIsDownloadingLoad,
 } from "./Slice";
 import { useEffect } from "react";
 import { userLogin, userLogout } from "../../../config";
@@ -23,8 +28,11 @@ import { MessageData } from "../APIs/MessagesAPI";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { SyncData, SyncStatus } from "../APIs/SyncAPI";
 import { SearchMessage } from "../APIs/SearchMessageAPI";
-import axios from "axios";
-import { DownloadAttachments } from "../APIs/AttachmentAPI";
+import {
+  AttachmentTableData,
+  DownloadAllAttachments,
+  DownloadAttachments,
+} from "../APIs/AttachmentAPI";
 
 const Handlers = () => {
   const dispatch = useDispatch();
@@ -47,6 +55,10 @@ const Handlers = () => {
     selectedAttachment,
     attachmentTableData,
     historyStack,
+    downloadingAttachmentId,
+    selectedAttachmentIds,
+    selectAllAttachments,
+    isDownloadingLoad,
   } = useSelector((state) => state.app);
 
   const handleLoad = () => {
@@ -166,6 +178,28 @@ const Handlers = () => {
     }
   };
 
+  const fetchAttachmentData = async (value) => {
+    dispatch(setLoading(true));
+    try {
+      const res = await AttachmentTableData(decodeURIComponent(value));
+      if (res) {
+        dispatch(updateAttachmentTableData(res));
+        dispatch(setShowDashboard(true));
+      } else {
+        dispatch(setShowDashboard(false));
+        toast.error("Not Authorized");
+        setTimeout(() => {
+          pushHistory("/login");
+        }, 1000);
+      }
+    } catch (error) {
+      dispatch(setShowDashboard(false));
+      dispatch(setLoading(false));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
   // End fetch API func
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -272,22 +306,74 @@ const Handlers = () => {
     pushHistory(`/attachments/${item.value}`);
   };
 
-  const handleDownload = async (attachmentId, attachmentName) => {
-    const blobData = await DownloadAttachments(attachmentId);
-    const blob = new Blob([blobData]);
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = attachmentName;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
+  const handleDownloadAttachments = async (attachmentId, attachmentName) => {
+    try {
+      dispatch(setDownloadingAttachmentId(attachmentId));
+      const blobData = await DownloadAttachments(attachmentId);
+      if (!blobData || !(blobData instanceof Blob)) {
+        toast.error("Invalid file response");
+        return;
+      }
+
+      const url = window.URL.createObjectURL(blobData);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = attachmentName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Download complete");
+    } catch (error) {
+      toast.error("Download failed");
+    } finally {
+      dispatch(setDownloadingAttachmentId(null));
+    }
+  };
+
+  const handleDownloadAllAttachments = async (filename) => {
+    try {
+      dispatch(setIsDownloadingLoad(true));
+      const blob = await DownloadAllAttachments(filename);
+      if (!blob || !(blob instanceof Blob)) {
+        toast.error("Invalid file response");
+        return;
+      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${filename}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Download complete");
+    } catch (error) {
+      toast.error("Download failed");
+      dispatch(setIsDownloadingLoad(false));
+    } finally {
+      dispatch(setIsDownloadingLoad(false));
+    }
   };
 
   const updateAttachmentTableData = (data) => {
     dispatch(setAttachmentTableData(data));
   };
+
+  const toggleAttachmentSelect = (id) => {
+    dispatch(toggleSelectAttachment(id));
+  };
+
+  const toggleSelectAllAttachmentRows = (rows) => {
+    const allIds = rows.map((r) => r.id);
+    dispatch(toggleSelectAllAttachments(allIds));
+  };
+
+  useEffect(() => {
+    dispatch(resetSelectedAttachments());
+  }, [attachmentTableData]);
 
   return {
     isLoading,
@@ -318,15 +404,23 @@ const Handlers = () => {
     selectedAttachment,
     attachmentTableData,
     handleAttachmentClick,
-    handleDownload,
+    handleDownloadAttachments,
+    handleDownloadAllAttachments,
     updateAttachmentTableData,
     historyStack,
     pushHistory,
     popHistory,
+    downloadingAttachmentId,
+    toggleAttachmentSelect,
+    toggleSelectAllAttachmentRows,
+    selectedAttachmentIds,
+    selectAllAttachments,
+    isDownloadingLoad,
     // Api func
     fetchDashboardData,
     fetchMessageData,
     fetchSyncData,
+    fetchAttachmentData,
   };
 };
 

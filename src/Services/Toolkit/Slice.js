@@ -16,6 +16,10 @@ const initialState = {
   historyStack: [],
   selectedAttachment: null,
   attachmentTableData: [],
+  downloadingAttachmentId: null,
+  selectedAttachmentIds: [],
+  selectAllAttachments: false,
+  isDownloadingLoad: false,
 };
 
 const Slice = createSlice({
@@ -63,6 +67,39 @@ const Slice = createSlice({
     setAttachmentTableData: (state, action) => {
       state.attachmentTableData = action.payload;
     },
+    setDownloadingAttachmentId: (state, action) => {
+      state.downloadingAttachmentId = action.payload;
+    },
+    toggleSelectAttachment: (state, action) => {
+      const id = action.payload;
+      if (state.selectedAttachmentIds.includes(id)) {
+        state.selectedAttachmentIds = state.selectedAttachmentIds.filter(
+          (x) => x !== id
+        );
+      } else {
+        state.selectedAttachmentIds.push(id);
+      }
+    },
+    toggleSelectAllAttachments: (state, action) => {
+      const allIds = action.payload;
+      if (
+        state.selectedAttachmentIds.length === allIds.length &&
+        allIds.length > 0
+      ) {
+        state.selectedAttachmentIds = [];
+        state.selectAllAttachments = false;
+      } else {
+        state.selectedAttachmentIds = allIds;
+        state.selectAllAttachments = true;
+      }
+    },
+    resetSelectedAttachments: (state) => {
+      state.selectedAttachmentIds = [];
+      state.selectAllAttachments = false;
+    },
+    setIsDownloadingLoad: (state, action) => {
+      state.isDownloadingLoad = action.payload;
+    },
   },
 });
 
@@ -80,5 +117,10 @@ export const {
   popFromHistoryStack,
   setSelectedAttachment,
   setAttachmentTableData,
+  setDownloadingAttachmentId,
+  toggleSelectAttachment,
+  toggleSelectAllAttachments,
+  resetSelectedAttachments,
+  setIsDownloadingLoad,
 } = Slice.actions;
 export default Slice.reducer;

@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import Handlers from "../../Services/Toolkit/Handlers";
+import { LuLoader, LuLoaderCircle } from "react-icons/lu";
 
-const Table = ({ tableTitle, columns, data }) => {
+const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
   const {
     currentPage,
     itemsPerPage,
@@ -13,6 +14,10 @@ const Table = ({ tableTitle, columns, data }) => {
     handlePageChange,
     updateTableData,
     handleItemsPerPageChange,
+    selectedAttachmentIds,
+    toggleSelectAllAttachmentRows,
+    toggleAttachmentSelect,
+    isLoading,
   } = Handlers();
 
   useEffect(() => {
@@ -30,76 +35,121 @@ const Table = ({ tableTitle, columns, data }) => {
         <div className="max-h-[605px] overflow-y-auto no-scrollbar">
           <table className="w-full border-collapse rounded-xl shadow-md whitespace-nowrap">
             <thead className="sticky top-0 z-10 bg-[#765EA5] text-white">
-              <tr>
-                <th className="sticky left-0 z-10 bg-[#765EA5] text-white px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold">
-                  S. No.
-                </th>
-                {columns.map((column, index) => (
-                  <th
-                    key={index}
-                    className="px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold"
-                  >
-                    {column.header}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedData.length > 0 ? (
-                paginatedData.map((row, rowIndex) => (
-                  <tr
-                    key={rowIndex}
-                    className={`${
-                      rowIndex % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"
-                    } border-t border-[#e5e5e5] hover:opacity-[0.8] transition-all duration-[0.2s] ease-in-out cursor-grab`}
-                  >
-                    <td
-                      className={`sticky left-0 ${
-                        rowIndex % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"
-                      } px-[2rem] py-[1.5rem] text-[1.6rem] font-medium text-[#333333]`}
-                    >
-                      {startIndex + rowIndex + 1}.
-                    </td>
-                    {columns.map((column, colIndex) => {
-                      const accessorOutput = column.accessor(row);
-                      const isElement = React.isValidElement(accessorOutput);
-
-                      return (
-                        <td
-                          key={colIndex}
-                          className="px-[2rem] py-[1rem] text-[1.6rem] font-medium text-[#333333]"
-                        >
-                          {isElement ? (
-                            accessorOutput
-                          ) : typeof accessorOutput === "string" &&
-                            column.header === "Attachment" ? (
-                            <a
-                              href={accessorOutput}
-                              className="text-blue-600 underline ml-2"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {accessorOutput.split("/").pop()}
-                            </a>
-                          ) : (
-                            accessorOutput
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))
+              {isLoading ? (
+                <LuLoaderCircle
+                  size={20}
+                  className="animate-spin text-[#765EA5]"
+                />
               ) : (
                 <tr>
-                  <td
-                    colSpan={columns.length + 1}
-                    className="px-[2rem] py-[1.5rem] text-center text-[1.6rem] text-[#666666]"
+                  {attachmentView && (
+                    <th className="px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold sticky left-0 z-10 bg-[#765EA5]">
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedAttachmentIds.length === data.length &&
+                          data.length > 0
+                        }
+                        onChange={() => toggleSelectAllAttachmentRows(data)}
+                        className="cursor-pointer"
+                      />
+                    </th>
+                  )}
+                  <th
+                    className={`${
+                      attachmentView ? "" : "sticky left-0 z-10"
+                    } z-10 bg-[#765EA5] text-white px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold`}
                   >
-                    No data available
-                  </td>
+                    S. No.
+                  </th>
+                  {columns.map((column, index) => (
+                    <th
+                      key={index}
+                      className="px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold"
+                    >
+                      {column.header}
+                    </th>
+                  ))}
                 </tr>
               )}
-            </tbody>
+            </thead>
+            {isLoading ? (
+              <LuLoaderCircle
+                size={20}
+                className="animate-spin text-[#765EA5]"
+              />
+            ) : (
+              <tbody>
+                {paginatedData.length > 0 ? (
+                  paginatedData.map((row, rowIndex) => (
+                    <tr
+                      key={rowIndex}
+                      className={`${
+                        rowIndex % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"
+                      } border-t border-[#e5e5e5] hover:opacity-[0.8] transition-all duration-[0.2s] ease-in-out cursor-grab`}
+                    >
+                      {attachmentView && (
+                        <td
+                          className={`sticky left-0 ${
+                            rowIndex % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"
+                          } px-[2rem] py-[1.5rem] text-[1.6rem] font-medium text-[#333333]`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedAttachmentIds.includes(row.id)}
+                            onChange={() => toggleAttachmentSelect(row.id)}
+                            className="cursor-pointer"
+                          />
+                        </td>
+                      )}
+                      <td
+                        className={`${attachmentView ? "" : "sticky left-0"} ${
+                          rowIndex % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"
+                        } px-[2rem] py-[1.5rem] text-[1.6rem] font-medium text-[#333333]`}
+                      >
+                        {startIndex + rowIndex + 1}.
+                      </td>
+                      {columns.map((column, colIndex) => {
+                        const accessorOutput = column.accessor(row);
+                        const isElement = React.isValidElement(accessorOutput);
+
+                        return (
+                          <td
+                            key={colIndex}
+                            className="px-[2rem] py-[1rem] text-[1.6rem] font-medium text-[#333333]"
+                          >
+                            {isElement ? (
+                              accessorOutput
+                            ) : typeof accessorOutput === "string" &&
+                              column.header === "Attachment" ? (
+                              <a
+                                href={accessorOutput}
+                                className="text-blue-600 underline ml-2"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {accessorOutput.split("/").pop()}
+                              </a>
+                            ) : (
+                              accessorOutput
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={columns.length + (attachmentView ? 2 : 1)}
+                      className="px-[2rem] py-[1.5rem] text-center text-[1.6rem] text-[#666666]"
+                    >
+                      No data available
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            )}
           </table>
         </div>
       </div>

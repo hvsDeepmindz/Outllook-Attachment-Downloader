@@ -80,12 +80,13 @@ const Messages = () => {
       {showDashboard ? (
         <>
           <Nav />
-          <div className="relative object-cover w-full h-full mt-[9rem] bg-[#f2f2f2]">
+          <div className="relative object-cover w-full h-[90vh] mt-[9rem] bg-[#f2f2f2]">
             <SearchFilter
               pageTitle="Messages"
               filterView={true}
               searchText={searchText}
               attachmentView={false}
+              searchView={true}
               onSearchChange={handleSearchTextChange}
               onSearchSubmit={handleSearchSubmit}
             />

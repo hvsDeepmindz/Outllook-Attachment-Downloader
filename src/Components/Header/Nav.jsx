@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Handlers from "../../Services/Toolkit/Handlers";
 
@@ -12,6 +12,12 @@ const Nav = () => {
     getInitials,
     handleLogout,
   } = Handlers();
+
+  const {fetchDashboardData} = Handlers();
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   return (
     <>

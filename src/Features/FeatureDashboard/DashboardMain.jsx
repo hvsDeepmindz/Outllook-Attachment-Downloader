@@ -21,9 +21,6 @@ const DashboardMain = () => {
   } = Handlers();
 
   const navigate = useNavigate();
-  useEffect(() => {
-    console.log("syncPendingItems:", syncPendingItems);
-  }, [syncPendingItems]);
 
   return (
     <>
@@ -94,7 +91,7 @@ const DashboardMain = () => {
             }
             btnFunc={syncPendingItems > 0 ? undefined : fetchSyncData}
             btnIcon={
-              syncPendingItems > 0 ? (
+              isLoading ? (
                 <i className="fa-solid fa-rotate animate-spin" />
               ) : (
                 <i className="fa-solid fa-rotate" />

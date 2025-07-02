@@ -10,23 +10,27 @@ import {
   setMessageTableData,
   setSyncPendingItems,
   setSearchText,
-  setSelectedAttachment,
-  setHistoryStack,
   pushToHistoryStack,
   popFromHistoryStack,
+  setSelectedAttachment,
+  setAttachmentTableData,
 } from "./Slice";
 import { useEffect } from "react";
 import { userLogin, userLogout } from "../../../config";
 import { DashboardData } from "../APIs/DashboardAPI";
 import { toast } from "react-toastify";
 import { MessageData } from "../APIs/MessagesAPI";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { SyncData, SyncStatus } from "../APIs/SyncAPI";
 import { SearchMessage } from "../APIs/SearchMessageAPI";
+import axios from "axios";
+import { DownloadAttachments } from "../APIs/AttachmentAPI";
 
 const Handlers = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { title: routeParamTitle } = useParams();
+  const location = useLocation();
 
   const {
     isLoading,
@@ -41,6 +45,7 @@ const Handlers = () => {
     syncPendingItems,
     searchText,
     selectedAttachment,
+    attachmentTableData,
     historyStack,
   } = useSelector((state) => state.app);
 
@@ -89,7 +94,7 @@ const Handlers = () => {
         dispatch(setDashboardData(null));
         dispatch(setShowDashboard(false));
         setTimeout(() => {
-          navigate("/login");
+          pushHistory("/login");
         }, 3000);
         return;
       }
@@ -97,7 +102,7 @@ const Handlers = () => {
         dispatch(setDashboardData(null));
         dispatch(setShowDashboard(false));
         setTimeout(() => {
-          navigate("/login");
+          pushHistory("/login");
         }, 3000);
         return;
       }
@@ -108,7 +113,7 @@ const Handlers = () => {
       dispatch(setDashboardData(null));
       dispatch(setShowDashboard(false));
       setTimeout(() => {
-        navigate("/login");
+        pushHistory("/login");
       }, 3000);
     } finally {
       dispatch(setLoading(false));
@@ -127,7 +132,7 @@ const Handlers = () => {
     } else {
       dispatch(setShowDashboard(false));
       toast.error("Not Authorized");
-      setTimeout(() => navigate("/login"), 2000);
+      setTimeout(() => pushHistory("/login"), 2000);
     }
     dispatch(setLoading(false));
   };
@@ -249,19 +254,39 @@ const Handlers = () => {
   };
 
   const pushHistory = (path) => {
-    dispatch(pushToHistoryStack(path));
+    const currentPath = location.pathname;
+    if (historyStack[historyStack.length - 1] !== currentPath) {
+      dispatch(pushToHistoryStack(currentPath));
+    }
+    navigate(path);
   };
 
   const popHistory = () => {
     dispatch(popFromHistoryStack());
-    const prevPath = historyStack[historyStack.length - 2] || "/dashboard";
+    const prevPath = historyStack[historyStack.length - 1] || "/dashboard";
     navigate(prevPath);
   };
 
-  const handleAttachmentSelect = (title) => {
-    dispatch(setSelectedAttachment(title));
-    pushHistory(`/attachments/${title}`);
-    navigate(`/attachments/${title}`);
+  const handleAttachmentClick = (item) => {
+    dispatch(setSelectedAttachment(item));
+    pushHistory(`/attachments/${item.value}`);
+  };
+
+  const handleDownload = async (attachmentId, attachmentName) => {
+    const blobData = await DownloadAttachments(attachmentId);
+    const blob = new Blob([blobData]);
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = attachmentName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const updateAttachmentTableData = (data) => {
+    dispatch(setAttachmentTableData(data));
   };
 
   return {
@@ -291,7 +316,10 @@ const Handlers = () => {
     handleSearchTextChange,
     handleSearchSubmit,
     selectedAttachment,
-    handleAttachmentSelect,
+    attachmentTableData,
+    handleAttachmentClick,
+    handleDownload,
+    updateAttachmentTableData,
     historyStack,
     pushHistory,
     popHistory,

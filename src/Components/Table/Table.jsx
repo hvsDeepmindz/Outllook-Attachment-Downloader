@@ -67,7 +67,7 @@ const Table = ({ tableTitle, columns, data }) => {
                       return (
                         <td
                           key={colIndex}
-                          className="px-[2rem] py-[1.5rem] text-[1.6rem] font-medium text-[#333333]"
+                          className="px-[2rem] py-[1rem] text-[1.6rem] font-medium text-[#333333]"
                         >
                           {isElement ? (
                             accessorOutput

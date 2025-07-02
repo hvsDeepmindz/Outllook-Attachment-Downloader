@@ -22,7 +22,7 @@ const Nav = () => {
         >
           <img
             loading="lazy"
-            src="/Media/logo.png"
+            src={`${import.meta.env.BASE_URL}/Media/logo.png`}
             alt="logo"
             className="w-[224px] h-[40px] object-cover"
           />

@@ -15,7 +15,7 @@ const LoginMain = () => {
           className={`flex justify-center items-center w-auto h-screen max-lg:h-[600px]`}
         >
           <img
-            src={`/Media/login.png`}
+            src={`${import.meta.env.BASE_URL}/Media/login.png`}
             alt="login"
             className={`w-full h-full object-cover`}
           />
@@ -25,7 +25,7 @@ const LoginMain = () => {
         >
           <div className={`flex gap-[1rem]`}>
             <img
-              src={`/Media/outlook.png`}
+              src={`${import.meta.env.BASE_URL}/Media/outlook.png`}
               alt="outlook"
               className="w-[40px] h-[40px] object-cover"
             />
@@ -39,7 +39,7 @@ const LoginMain = () => {
           >
             <AuthBtn
               btnTitle={`Sign in with Microsoft`}
-              btnImg={`/Media/microsoft.png`}
+              btnImg={`${import.meta.env.BASE_URL}/Media/microsoft.png`}
             />
           </div>
         </div>

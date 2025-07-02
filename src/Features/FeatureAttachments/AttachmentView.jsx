@@ -72,7 +72,7 @@ const AttachmentView = () => {
           className={`flex items-center justify-start bg-[#f1f1f1] border-[1px] border-[#f2f2f2] px-[2rem] py-[0.5rem] rounded-full`}
         >
           <img
-            src="/Media/doc.png"
+            src={`${import.meta.env.BASE_URL}/Media/doc.png`}
             loading="lazy"
             className={`w-[16px] h-[16px]`}
           />
@@ -87,13 +87,13 @@ const AttachmentView = () => {
         row.attachment_name ? (
           <div className="flex items-center gap-3">
             <img
-              src={`/Media/download.png`}
+              src={`${import.meta.env.BASE_URL}/Media/download.png`}
               loading="lazy"
               onClick={() => handleDownload(row.id, row.attachment_name)}
               className="fa-solid fa-download text-[1.8rem] text-[grey] cursor-pointer bg-[white] border-[1px] border-[#d2d2d2] w-[30px] h-[30px] px-[0.3rem] py-[0.3rem] rounded-md"
             />
             <img
-              src={`/Media/upload.png`}
+              src={`${import.meta.env.BASE_URL}/Media/upload.png`}
               loading="lazy"
               className="fa-solid fa-upload text-[1.8rem] text-[grey] cursor-pointer bg-[white] border-[1px] 
               border-[#d2d2d2] w-[30px] h-[30px] px-[0.3rem] py-[0.3rem] rounded-md"

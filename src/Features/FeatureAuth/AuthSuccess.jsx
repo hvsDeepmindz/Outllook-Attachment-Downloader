@@ -12,7 +12,7 @@ const AuthSuccess = () => {
         >
           <div className={`w-auto h-auto`}>
             <img
-              src="/Media/success.png"
+              src={`${import.meta.env.BASE_URL}/Media/success.png`}
               alt="success"
               className="w-full h-full object-cover"
             />

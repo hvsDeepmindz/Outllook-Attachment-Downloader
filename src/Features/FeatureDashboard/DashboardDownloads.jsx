@@ -17,7 +17,7 @@ const DashboardDownloads = () => {
         <div className="flex items-center gap-[2rem]">
           <div className="bg-[#EAEFF5] cursor-pointer rounded-xl px-[1rem] py-[1rem] w-auto h-auto">
             <img
-              src="/Media/download.png"
+              src={`${import.meta.env.BASE_URL}/Media/download.png`}
               alt="download"
               className="w-[24px] h-[24px] object-cover"
             />

@@ -10,7 +10,7 @@ import AttachmentView from "./Features/FeatureAttachments/AttachmentView";
 const App = () => {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename="/outlook_mail_loader">
         <div className={`w-full relative object-cover bg-white`}>
           <Routes>
             <Route path="/" element={<Navigate to={"/login"} />}></Route>

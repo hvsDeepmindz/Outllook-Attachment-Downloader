@@ -17,7 +17,7 @@ const DashboardMail = () => {
         <div className="flex items-center gap-[2rem]">
           <div className="bg-[#EAEFF5] cursor-pointer rounded-xl px-[1rem] py-[1rem] w-auto h-auto">
             <img
-              src="/Media/mail.png"
+              src={`${import.meta.env.BASE_URL}/Media/mail.png`}
               alt="mail"
               className="w-[24px] h-[24px] object-cover"
             />

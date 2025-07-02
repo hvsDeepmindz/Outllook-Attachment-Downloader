@@ -27,7 +27,7 @@ const SearchFilter = ({
             className="w-auto flex gap-[1rem] cursor-pointer"
           >
             <img
-              src="/Media/leftarrow.png"
+              src={`${import.meta.env.BASE_URL}/Media/leftarrow.png`}
               alt="leftarrow"
               className="w-full h-full"
             />
@@ -93,7 +93,7 @@ const SearchFilter = ({
               />
 
               <img
-                src="/Media/search.png"
+                src={`${import.meta.env.BASE_URL}/Media/search.png`}
                 alt="search"
                 className="w-[20px] h-[20px]"
               />
@@ -116,7 +116,7 @@ const SearchFilter = ({
               />
 
               <img
-                src="/Media/search.png"
+                src={`${import.meta.env.BASE_URL}/Media/search.png`}
                 alt="search"
                 className="w-[20px] h-[20px]"
               />
@@ -127,7 +127,7 @@ const SearchFilter = ({
               className={`bg-white px-[1rem] py-[1rem] rounded-lg hover:opacity-[0.8] transition-all duration-[0.2s] ease-in-out border-[1px] border-[#765EA5] cursor-pointer`}
             >
               <img
-                src="/Media/filter.png"
+                src={`${import.meta.env.BASE_URL}/Media/filter.png`}
                 alt="filter"
                 className="w-[24px] h-[24px]"
               />

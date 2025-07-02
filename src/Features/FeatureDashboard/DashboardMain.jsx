@@ -76,7 +76,7 @@ const DashboardMain = () => {
           </div>
           <div className={`flex justify-end`}>
             <p className={`text-[1.8rem] font-normal text-[#666666]`}>
-              Last synced: {dashboardData?.last_synced}
+              Last sync at {dashboardData?.last_synced}
             </p>
           </div>
         </div>

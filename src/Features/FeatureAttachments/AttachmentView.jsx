@@ -113,6 +113,7 @@ const AttachmentView = () => {
           downloadAll={() => {
             handleDownloadAllAttachments(decodeURIComponent(value));
           }}
+          showUpload={decodeURIComponent(value) === "resume"}
         />
         <Table
           tableTitle={`${finalTitle} Table`}

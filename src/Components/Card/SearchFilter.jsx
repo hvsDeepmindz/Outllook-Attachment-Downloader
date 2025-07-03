@@ -19,6 +19,7 @@ const SearchFilter = ({
   searchView,
   attachmentTitle,
   downloadAll,
+  showUpload,
 }) => {
   const { popHistory, isDownloadingLoad, selectedAttachmentIds } = Handlers();
 
@@ -74,14 +75,18 @@ const SearchFilter = ({
                   ))}
                 </select>
               </div>
-              <div className={`w-auto flex justify-end`}>
-                <ViewBtn
-                  btnTitle={`Upload`}
-                  btnView={"table"}
-                  btnIcon={<i className={`fa-solid fa-upload`} />}
-                />
-              </div>
             </>
+          ) : null}
+          {attachmentView === true &&
+          selectedAttachmentIds.length > 0 &&
+          showUpload ? (
+            <div className={`w-auto flex justify-end`}>
+              <ViewBtn
+                btnTitle={`Upload`}
+                btnView={"table"}
+                btnIcon={<i className={`fa-solid fa-upload`} />}
+              />
+            </div>
           ) : null}
           {attachmentView === true ? (
             <div className={`w-auto`}>

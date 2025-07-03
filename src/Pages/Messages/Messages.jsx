@@ -31,8 +31,8 @@ const Messages = () => {
   }, []);
 
   const columns = [
-    { header: "Name", accessor: (row) => row.sender_name },
-    { header: "Email", accessor: (row) => row.sender_mail },
+    { header: "Sender Name", accessor: (row) => row.sender_name },
+    { header: "Sender Email", accessor: (row) => row.sender_mail },
     { header: "Subject", accessor: (row) => row.subject },
     {
       header: "Date",
@@ -56,7 +56,7 @@ const Messages = () => {
             const value = row[key];
             if (key === "sender_name" || key === "subject") {
               const words = value?.split(" ") || [];
-              const limit = key === "subject" ? 4 : 8;
+              const limit = key === "subject" ? 6 : 12;
               const display =
                 words.length > limit
                   ? words.slice(0, limit).join(" ") + "..."
@@ -68,7 +68,7 @@ const Messages = () => {
               );
             }
             if (key.includes("datetime"))
-              return new Date(value).toLocaleDateString();
+              return new Date(value).toLocaleString();
             if (typeof value === "boolean") return value ? "Yes" : "No";
             return value;
           },
@@ -92,7 +92,7 @@ const Messages = () => {
             />
             <Table
               tableTitle="Messages Table"
-              columns={columns}
+              columns={columnsAll}
               data={{
                 table_data: messageTableData,
                 meta_data: { total_items: totalItems, total_pages: totalPages },

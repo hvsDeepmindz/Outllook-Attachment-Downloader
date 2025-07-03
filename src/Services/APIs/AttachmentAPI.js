@@ -54,3 +54,7 @@ export const DownloadAllAttachments = async (filename) => {
     throw error;
   }
 };
+
+export const BulkUpload = async () => {
+  
+};

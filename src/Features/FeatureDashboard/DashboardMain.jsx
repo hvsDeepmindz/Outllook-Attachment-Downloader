@@ -50,6 +50,7 @@ const DashboardMain = () => {
             <div className={`flex items-center gap-[2rem]`}>
               <div className={`w-auto`}>
                 <ViewBtn
+                  btnView={"content"}
                   btnTitle={"Messages"}
                   btnFunc={() => {
                     navigate("/messages");
@@ -82,22 +83,22 @@ const DashboardMain = () => {
         </div>
         <div className={`w-auto justify-end`}>
           <ViewBtn
+            btnView={"content"}
             btnTitle={
-              syncPendingItems > 0
+              isLoading && syncPendingItems > 0
                 ? `Syncing ${syncPendingItems} item${
-                    syncPendingItems > 1 ? "s" : ""
+                    syncPendingItems !== 1 ? "s" : ""
                   }...`
                 : "Sync"
             }
-            btnFunc={syncPendingItems > 0 ? undefined : fetchSyncData}
+            btnFunc={isLoading ? undefined : fetchSyncData}
             btnIcon={
-              isLoading ? (
-                <i className="fa-solid fa-rotate animate-spin" />
-              ) : (
-                <i className="fa-solid fa-rotate" />
-              )
+              <i
+                className={`fa-solid fa-rotate ${
+                  isLoading ? "animate-spin" : ""
+                }`}
+              />
             }
-            btnDisable={syncPendingItems > 0}
           />
         </div>
       </section>

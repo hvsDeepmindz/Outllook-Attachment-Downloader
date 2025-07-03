@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { AttachmentData } from "../../Services/Data/AttachmentData";
 import Handlers from "../../Services/Toolkit/Handlers";
 import { LuLoaderCircle } from "react-icons/lu";
+import ActionBtn from "../Btns/ActionBtn";
+import ViewBtn from "../Btns/ViewBtn";
 
 const SearchFilter = ({
   pageTitle,
@@ -18,7 +20,7 @@ const SearchFilter = ({
   attachmentTitle,
   downloadAll,
 }) => {
-  const { popHistory, isDownloadingLoad } = Handlers();
+  const { popHistory, isDownloadingLoad, selectedAttachmentIds } = Handlers();
 
   return (
     <>
@@ -54,40 +56,55 @@ const SearchFilter = ({
 
         {/* Search Bar */}
         <div className={`flex justify-end w-auto items-center gap-[2rem]`}>
-          {attachmentView === true ? (
-            <div className={`flex items-center gap-[1rem]`}>
-              <p className={`text-[#4B4B4B] text-[1.8rem]`}>Move to</p>
-              <select
-                name="attachments"
-                value={selectedAttachment}
-                onChange={(e) => handleAttachmentSelect(e.target.value)}
-                className={`bg-white border-[#765EA5] border-[1px] outline-none px-[2rem] py-[1rem] rounded-xl cursor-pointer font-normal text-[1.8rem] text-[#4D4D4D]`}
-              >
-                <option value="">Select</option>
-                {AttachmentData.map((ele) => (
-                  <option key={ele.id} value={ele.title}>
-                    {ele.title}
-                  </option>
-                ))}
-              </select>
-            </div>
+          {attachmentView === true && selectedAttachmentIds.length > 0 ? (
+            <>
+              <div className={`flex items-center gap-[1rem]`}>
+                <p className={`text-[#4B4B4B] text-[1.8rem]`}>Move to</p>
+                <select
+                  name="attachments"
+                  value={selectedAttachment}
+                  onChange={(e) => handleAttachmentSelect(e.target.value)}
+                  className={`bg-white border-[#765EA5] border-[1px] outline-none px-[2rem] py-[1rem] rounded-xl cursor-pointer font-normal text-[1.8rem] text-[#4D4D4D]`}
+                >
+                  <option value="">Select</option>
+                  {AttachmentData.map((ele) => (
+                    <option key={ele.id} value={ele.title}>
+                      {ele.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className={`w-auto flex justify-end`}>
+                <ViewBtn
+                  btnTitle={`Upload`}
+                  btnView={"table"}
+                  btnIcon={<i className={`fa-solid fa-upload`} />}
+                />
+              </div>
+            </>
           ) : null}
           {attachmentView === true ? (
-            <button
-              onClick={downloadAll}
-              className={`px-[2rem] py-[1rem] bg-white transition-all duration-[0.2s] ease-in-out hover:opacity-[0.8] rounded-xl border-[1px] border-[#765EA5] text-[#765EA5] font-normal text-[1.8rem] flex items-center gap-2 ${
-                isDownloadingLoad ? "cursor-not-allowed" : "cursor-pointer "
-              }`}
-            >
-              {isDownloadingLoad ? (
-                <LuLoaderCircle className="animate-spin text-[2rem]" />
-              ) : (
-                <>
-                  <i className="fa-solid fa-download" />
-                  <span>Download All</span>
-                </>
-              )}
-            </button>
+            <div className={`w-auto`}>
+              <ViewBtn
+                btnTitle={
+                  isDownloadingLoad ? (
+                    <LuLoaderCircle size={20} className={`animate-spin`} />
+                  ) : (
+                    "Download All"
+                  )
+                }
+                btnIcon={
+                  isDownloadingLoad ? null : (
+                    <i className={`fa-solid fa-download`} />
+                  )
+                }
+                btnDisable={isDownloadingLoad}
+                btnView={"table"}
+                btnFunc={() => {
+                  downloadAll();
+                }}
+              />
+            </div>
           ) : null}
           {attachmentView === true ? (
             <div

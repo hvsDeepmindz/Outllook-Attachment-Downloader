@@ -35,49 +35,51 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
         <div className="max-h-[605px] overflow-y-auto no-scrollbar">
           <table className="w-full border-collapse rounded-xl shadow-md whitespace-nowrap">
             <thead className="sticky top-0 z-10 bg-[#765EA5] text-white">
-              {isLoading ? (
-                <LuLoaderCircle
-                  size={20}
-                  className="animate-spin text-[#765EA5]"
-                />
-              ) : (
-                <tr>
-                  {attachmentView && (
-                    <th className="px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold sticky left-0 z-10 bg-[#765EA5]">
-                      <input
-                        type="checkbox"
-                        checked={
-                          selectedAttachmentIds.length === data.length &&
-                          data.length > 0
-                        }
-                        onChange={() => toggleSelectAllAttachmentRows(data)}
-                        className="cursor-pointer"
-                      />
-                    </th>
-                  )}
-                  <th
-                    className={`${
-                      attachmentView ? "" : "sticky left-0 z-10"
-                    } z-10 bg-[#765EA5] text-white px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold`}
-                  >
-                    S. No.
+              <tr>
+                {attachmentView && (
+                  <th className="px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold sticky left-0 z-10 bg-[#765EA5]">
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedAttachmentIds.length === data.length &&
+                        data.length > 0
+                      }
+                      onChange={() => toggleSelectAllAttachmentRows(data)}
+                      className="cursor-pointer"
+                    />
                   </th>
-                  {columns.map((column, index) => (
-                    <th
-                      key={index}
-                      className="px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold"
-                    >
-                      {column.header}
-                    </th>
-                  ))}
-                </tr>
-              )}
+                )}
+                <th
+                  className={`${
+                    attachmentView ? "" : "sticky left-0 z-10"
+                  } z-10 bg-[#765EA5] text-white px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold`}
+                >
+                  S. No.
+                </th>
+                {columns.map((column, index) => (
+                  <th
+                    key={index}
+                    className="px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold"
+                  >
+                    {column.header}
+                  </th>
+                ))}
+              </tr>
             </thead>
             {isLoading ? (
-              <LuLoaderCircle
-                size={20}
-                className="animate-spin text-[#765EA5]"
-              />
+              <tbody>
+                <tr>
+                  <td
+                    colSpan={columns.length + (attachmentView ? 2 : 1)}
+                    className="py-[4rem] px-[4rem] text-center"
+                  >
+                    <LuLoaderCircle
+                      size={30}
+                      className="animate-spin text-[#765EA5] mx-auto"
+                    />
+                  </td>
+                </tr>
+              </tbody>
             ) : (
               <tbody>
                 {paginatedData.length > 0 ? (

@@ -7,10 +7,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const Dashboard = () => {
-  const { fetchDashboardData, showDashboard } = Handlers();
+  const { fetchDashboardData, showDashboard, dashboardData } = Handlers();
 
   useEffect(() => {
-    fetchDashboardData();
+    if (!dashboardData) {
+      fetchDashboardData();
+    }
   }, []);
 
   return (

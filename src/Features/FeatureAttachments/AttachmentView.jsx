@@ -9,6 +9,7 @@ import { AttachmentData } from "../../Services/Data/AttachmentData";
 import { LuLoaderCircle } from "react-icons/lu";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import APIErrorView from "../../Components/Error/APIErrorView";
 
 const AttachmentView = () => {
   const { title: value } = useParams();

@@ -156,39 +156,25 @@ const Handlers = () => {
   const fetchSyncData = async () => {
     dispatch(setLoading(true));
     try {
-      const initial = await SyncStatus();
+      const [initial, result] = await Promise.all([SyncStatus(), SyncData()]);
       const total = initial?.total_items || 0;
       const syncedBefore = initial?.total_synced_items || 0;
-      const pending = Math.max(total - syncedBefore, 0);
-
-      if (pending === 0) {
-        toast.info("Already up to date");
-        dispatch(setSyncPendingItems(0));
-        dispatch(setLoading(false));
-        return;
-      }
+      const syncedAfter = result?.total_synced_items || 0;
+      const newSynced = Math.max(syncedAfter - syncedBefore, 0);
+      const pending = Math.max(total - syncedAfter, 0);
 
       dispatch(setSyncPendingItems(pending));
 
-      const syncInterval = setInterval(async () => {
-        const status = await SyncStatus();
-        const syncedAfter = status?.total_synced_items || 0;
-        const newPending = Math.max(total - syncedAfter, 0);
-        const newSynced = Math.max(syncedAfter - syncedBefore, 0);
+      if (newSynced > 0) {
+        toast.success(`Synced ${newSynced} items successfully`);
+      } else {
+        toast.info("Already up to date");
+      }
 
-        dispatch(setSyncPendingItems(newPending));
-
-        if (newPending === 0 || syncedAfter >= total) {
-          clearInterval(syncInterval);
-          toast.success(`Synced ${newSynced} items successfully`);
-          fetchDashboardData();
-          dispatch(setLoading(false));
-        }
-      }, 1000);
-
-      await SyncData();
+      fetchDashboardData();
     } catch {
       toast.error("Sync failed");
+    } finally {
       dispatch(setLoading(false));
     }
   };

@@ -25,12 +25,13 @@ const DashboardMain = () => {
   return (
     <>
       <section
-        className={`px-[10rem] py-[6rem] w-full relative object-cover max-md:px-[2rem] flex justify-between items-start 
-        gap-[8rem]`}
+        className={`px-[10rem] py-[6rem] w-full relative object-cover flex justify-between items-start 
+        gap-[8rem] max-xl:gap-[2rem] max-xl:px-[5rem] max-md:px-[2rem]`}
       >
         <div className={`flex flex-col gap-[1rem] justify-end`}>
           <div
-            className={`rounded-xl bg-white px-[3rem] py-[2rem] w-auto flex justify-center items-center gap-[10rem]`}
+            className={`rounded-xl bg-white px-[3rem] py-[2rem] w-auto flex justify-center items-center gap-[10rem] 
+            max-xl:gap-[4rem]`}
           >
             <div className={`flex items-center gap-[1rem]`}>
               <div className={`bg-[#624D8A] rounded-xl px-[1.2rem] py-[1rem]`}>
@@ -48,7 +49,7 @@ const DashboardMain = () => {
               </div>
             </div>
             <div className={`flex items-center gap-[2rem]`}>
-              <div className={`w-auto`}>
+              <div className={`w-auto flex items-center`}>
                 <ViewBtn
                   btnView={"content"}
                   btnTitle={"Messages"}
@@ -75,13 +76,33 @@ const DashboardMain = () => {
               </div>
             </div>
           </div>
-          <div className={`flex justify-end`}>
+          <div className={`flex justify-end items-center gap-[2rem] max-xl:mt-[2rem]`}>
             <p className={`text-[1.8rem] font-normal text-[#666666]`}>
               Last sync at {dashboardData?.last_synced}
             </p>
+            <div className={`w-auto justify-end hidden max-xl:flex`}>
+              <ViewBtn
+                btnView={"content"}
+                btnTitle={
+                  isLoading && syncPendingItems > 0
+                    ? `Syncing ${syncPendingItems} item${
+                        syncPendingItems !== 1 ? "s" : ""
+                      }...`
+                    : "Sync"
+                }
+                btnFunc={isLoading ? undefined : fetchSyncData}
+                btnIcon={
+                  <i
+                    className={`fa-solid fa-rotate ${
+                      isLoading ? "animate-spin" : ""
+                    }`}
+                  />
+                }
+              />
+            </div>
           </div>
         </div>
-        <div className={`w-auto justify-end`}>
+        <div className={`w-auto justify-end max-xl:hidden`}>
           <ViewBtn
             btnView={"content"}
             btnTitle={

@@ -43,7 +43,11 @@ const DashboardAttachments = () => {
 
       <div className="flex justify-between w-full items-center px-[0rem]">
         <div className="w-auto h-auto relative">
-          <img src={`${import.meta.env.BASE_URL}/Media/chart.png`} alt="chart" className="w-full h-full" />
+          <img
+            src={`${import.meta.env.BASE_URL}/Media/chart.png`}
+            alt="chart"
+            className="w-full h-full"
+          />
           <div className="absolute bottom-[7rem] right-0 rounded-xl bg-white shadow-md z-[200] transition-all duration-[0.2s] ease-in-out border-[1px] border-[#f2f2f2]">
             <div className="px-[1rem] py-[0.5rem] bg-[#F5F5F5] rounded-t-xl flex items-center gap-[0.5rem]">
               <div className="rounded-full px-[0.5rem] py-[0.5rem] bg-[#2E125A] mt-[0.5rem]"></div>

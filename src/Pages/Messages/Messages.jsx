@@ -92,7 +92,7 @@ const Messages = () => {
             />
             <Table
               tableTitle="Messages Table"
-              columns={columnsAll}
+              columns={columns}
               data={{
                 table_data: messageTableData,
                 meta_data: { total_items: totalItems, total_pages: totalPages },

@@ -4,10 +4,10 @@ import React from "react";
 const ViewBtn = ({ btnTitle, btnFunc, btnIcon, btnDisable, btnView }) => {
   return (
     <>
-      <button
+      <div
         onClick={btnFunc}
         disabled={btnDisable}
-        className={`rounded-xl flex items-center px-[2rem] py-[1rem] border-[1px] ${
+        className={`rounded-xl flex items-center gap-[1rem] px-[2rem] py-[1rem] border-[1px] ${
           btnView === "table"
             ? "bg-white border-[#765EA5] text-[#765EA5]"
             : "bg-[#765EA5] border-transparent text-white"
@@ -15,8 +15,9 @@ const ViewBtn = ({ btnTitle, btnFunc, btnIcon, btnDisable, btnView }) => {
           btnDisable ? "cursor-not-allowed" : "cursor-pointer "
         }`}
       >
-        {btnIcon}&nbsp; {btnTitle}
-      </button>
+        <div className={``}>{btnIcon}</div>
+        <button className={``}>{btnTitle}</button>
+      </div>
     </>
   );
 };

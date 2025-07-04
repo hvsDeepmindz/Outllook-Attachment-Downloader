@@ -80,7 +80,7 @@ const Messages = () => {
       {showDashboard ? (
         <>
           <Nav />
-          <div className="relative object-cover w-full h-[90vh] mt-[9rem] bg-[#f2f2f2]">
+          <div className="relative object-cover w-full h-screen mt-[9rem] bg-[#f2f2f2]">
             <SearchFilter
               pageTitle="Messages"
               filterView={true}

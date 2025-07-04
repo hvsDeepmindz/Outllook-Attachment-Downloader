@@ -13,7 +13,7 @@ const Nav = () => {
     handleLogout,
   } = Handlers();
 
-  const {fetchDashboardData} = Handlers();
+  const { fetchDashboardData } = Handlers();
 
   useEffect(() => {
     fetchDashboardData();
@@ -30,7 +30,7 @@ const Nav = () => {
             loading="lazy"
             src={`${import.meta.env.BASE_URL}/Media/logo.png`}
             alt="logo"
-            className="w-[224px] h-[40px] object-cover"
+            className="w-[224px] h-[40px] object-cover max-sm:w-[180px] max-sm:h-[30px]"
           />
         </Link>
 
@@ -42,7 +42,7 @@ const Nav = () => {
           </div>
 
           <div
-            className={`absolute top-full right-[-6rem] mt-[2.5rem] w-auto px-[3rem] py-[2rem] rounded-xl bg-white shadow-lg transition-opacity transition-visibility duration-300 ease-in-out ${
+            className={`absolute top-full right-[-6rem] max-sm:right-[-2rem] mt-[2.5rem] w-auto px-[3rem] py-[2rem] rounded-xl bg-white shadow-lg transition-opacity transition-visibility duration-300 ease-in-out ${
               isGroupVisible ? "opacity-100 visible" : "opacity-0 invisible"
             }`}
             onMouseLeave={hideGroupMenu}

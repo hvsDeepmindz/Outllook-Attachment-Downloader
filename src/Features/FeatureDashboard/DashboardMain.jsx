@@ -25,13 +25,13 @@ const DashboardMain = () => {
   return (
     <>
       <section
-        className={`px-[10rem] py-[6rem] w-full relative object-cover flex justify-between items-start 
-        gap-[8rem] max-xl:gap-[2rem] max-xl:px-[5rem] max-md:px-[2rem]`}
+        className={`px-[10rem] py-[6rem] max-sm:py-[4rem] w-full relative object-cover flex justify-between items-start 
+        gap-[8rem] max-xl:gap-[2rem] max-xl:px-[5rem] max-md:px-[2rem] max-xl:flex-col max-xl:items-center`}
       >
-        <div className={`flex flex-col gap-[1rem] justify-end`}>
+        <div className={`flex flex-col gap-[1rem] justify-end max-md:w-full`}>
           <div
             className={`rounded-xl bg-white px-[3rem] py-[2rem] w-auto flex justify-center items-center gap-[10rem] 
-            max-xl:gap-[4rem]`}
+            max-xl:gap-[4rem] max-md:flex-col max-md:items-start max-md:w-full`}
           >
             <div className={`flex items-center gap-[1rem]`}>
               <div className={`bg-[#624D8A] rounded-xl px-[1.2rem] py-[1rem]`}>
@@ -48,8 +48,8 @@ const DashboardMain = () => {
                 </p>
               </div>
             </div>
-            <div className={`flex items-center gap-[2rem]`}>
-              <div className={`w-auto flex items-center`}>
+            <div className={`flex items-center gap-[2rem] max-sm:flex-col max-sm:w-full`}>
+              <div className={`w-auto flex items-center max-sm:w-full`}>
                 <ViewBtn
                   btnView={"content"}
                   btnTitle={"Messages"}
@@ -59,7 +59,7 @@ const DashboardMain = () => {
                   btnIcon={<i className="fa-regular fa-envelope" />}
                 />
               </div>
-              <div className={`w-auto`}>
+              <div className={`w-auto flex items-center max-sm:w-full`}>
                 <LinkBtn
                   btnTitle={"Attachments"}
                   btnFunc={() => {
@@ -68,7 +68,7 @@ const DashboardMain = () => {
                   btnIcon={<i className="fa-solid fa-paperclip" />}
                 />
               </div>
-              <div className={`w-auto`}>
+              <div className={`w-auto flex items-center max-sm:w-full`}>
                 <ActionBtn
                   btnTitle={"Process Duplicates"}
                   btnIcon={<i className="fa-regular fa-clone" />}
@@ -76,11 +76,13 @@ const DashboardMain = () => {
               </div>
             </div>
           </div>
-          <div className={`flex justify-end items-center gap-[2rem] max-xl:mt-[2rem]`}>
+          <div
+            className={`flex justify-end max-sm:w-full items-center max-sm:flex-col gap-[2rem] max-xl:mt-[2rem]`}
+          >
             <p className={`text-[1.8rem] font-normal text-[#666666]`}>
               Last sync at {dashboardData?.last_synced}
             </p>
-            <div className={`w-auto justify-end hidden max-xl:flex`}>
+            <div className={`w-auto max-sm:w-full justify-end hidden max-xl:flex`}>
               <ViewBtn
                 btnView={"content"}
                 btnTitle={
@@ -125,7 +127,7 @@ const DashboardMain = () => {
       </section>
 
       <section
-        className={`px-[10rem] pt-[0] pb-[6rem] relative object-cover w-full grid grid-cols-3 gap-[4rem] justify-center`}
+        className={`px-[10rem] pt-[0] pb-[6rem] relative object-cover w-full grid grid-cols-3 gap-[4rem] justify-center max-xl:grid-cols-1 max-xl:px-[5rem] max-md:px-[2rem]`}
       >
         <DashboardDownloads />
         <DashboardUploads />
@@ -133,7 +135,7 @@ const DashboardMain = () => {
       </section>
 
       <section
-        className={`pt-[0] pb-[6rem] px-[10rem] relative object-cover w-auto grid justify-start`}
+        className={`pt-[0] pb-[6rem] px-[10rem] max-xl:px-[5rem] max-md:px-[2rem] relative object-cover w-auto grid max-xl:grid-cols-1 justify-start`}
       >
         <DashboardAttachments />
       </section>

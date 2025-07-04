@@ -16,7 +16,7 @@ const DashboardAttachments = () => {
     : 0;
 
   return (
-    <div className="bg-white relative object-cover px-[3rem] py-[3rem] rounded-xl flex flex-col gap-[1rem] shadow-md transition-all duration-[0.4s] ease-in-out hover:translate-y-[-1rem] cursor-pointer">
+    <div className="bg-white relative object-cover px-[3rem] py-[3rem] rounded-xl flex flex-col gap-[1rem] shadow-md transition-all duration-[0.4s] ease-in-out hover:translate-y-[-1rem] cursor-pointer max-xl:w-full">
       <div className="flex justify-between items-center gap-[2rem] w-full">
         <div className="flex items-center gap-[2rem]">
           <div className="bg-[#EAEFF5] cursor-pointer rounded-xl px-[1rem] py-[1rem] w-auto h-auto">
@@ -41,7 +41,7 @@ const DashboardAttachments = () => {
         </div>
       </div>
 
-      <div className="flex justify-between w-full items-center px-[0rem]">
+      <div className="flex justify-between max-sm:flex-col max-sm:justify-center w-full items-center px-[0rem]">
         <div className="w-auto h-auto relative">
           <img
             src={`${import.meta.env.BASE_URL}/Media/chart.png`}
@@ -62,7 +62,7 @@ const DashboardAttachments = () => {
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-[3rem] ml-[4rem]">
+        <div className="grid grid-cols-2 gap-[3rem] ml-[4rem] max-sm:flex max-sm:m-0 max-sm:shrink-0 max-sm:grow-0 overflow-x-auto max-sm:max-w-2xl max-sm:gap-[6rem] max-sm:px-[2rem] no-scrollbar">
           <div className="flex items-start gap-[1rem]">
             <div className="rounded-full px-[0.8rem] py-[0.8rem] bg-[#8A55DD] mt-[0.5rem]"></div>
             <div className="flex flex-col gap-[0.5rem]">

@@ -29,10 +29,10 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
   return (
     <div
       title={tableTitle}
-      className="px-[10rem] pb-[1rem] relative object-cover w-full rounded-xl"
+      className="px-[10rem] pb-[1rem] relative w-full rounded-xl max-xl:px-[5rem] max-md:px-[2rem]"
     >
       <div className="overflow-x-auto no-scrollbar rounded-xl">
-        <div className="h-[605px] overflow-y-auto no-scrollbar">
+        <div className="h-[580px] max-md:h-[500px] overflow-y-auto no-scrollbar">
           <table className="w-full border-collapse rounded-xl shadow-md whitespace-nowrap">
             <thead className="sticky top-0 z-10 bg-[#765EA5] text-white">
               <tr>
@@ -51,8 +51,8 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
                 )}
                 <th
                   className={`${
-                    attachmentView ? "" : "sticky left-0 z-10"
-                  } z-10 bg-[#765EA5] text-white px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold`}
+                    attachmentView === true ? "left-[5rem]" : "left-0"
+                  } sticky z-10 bg-[#765EA5] text-white px-[2rem] py-[1.5rem] text-left text-[1.6rem] font-semibold`}
                 >
                   S. No.
                 </th>
@@ -105,7 +105,9 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
                         </td>
                       )}
                       <td
-                        className={`${attachmentView ? "" : "sticky left-0"} ${
+                        className={`${
+                          attachmentView === true ? "left-[5rem]" : "left-0"
+                        } sticky ${
                           rowIndex % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"
                         } px-[2rem] py-[1.5rem] text-[1.6rem] font-medium text-[#333333]`}
                       >
@@ -156,8 +158,8 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
         </div>
       </div>
 
-      <div className="flex justify-end gap-[2rem] items-center py-[1rem] mt-[1rem]">
-        <div className="item-per-page flex items-center gap-[0.8rem]">
+      <div className="flex justify-end max-md:flex-col gap-[2rem] items-center py-[1rem] mt-[2rem]">
+        <div className="item-per-page flex items-center gap-[1rem]">
           <label className="text-[1.6rem] text-[#444444]">Rows:</label>
           <select
             value={itemsPerPage}
@@ -170,11 +172,11 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
               </option>
             ))}
           </select>
+          <span className="text-[1.6rem] text-black font-normal">
+            {startIndex + 1} - {Math.min(endIndex, totalItems)}{" "}
+            <span className="text-[grey]">Out of {totalItems}</span>
+          </span>
         </div>
-        <span className="text-[1.6rem] text-black font-normal">
-          {startIndex + 1} - {Math.min(endIndex, totalItems)}{" "}
-          <span className="text-[grey]">Out of {totalItems}</span>
-        </span>
         <div className="flex items-center gap-[0.2rem]">
           <button
             onClick={() => handlePageChange(currentPage - 1)}

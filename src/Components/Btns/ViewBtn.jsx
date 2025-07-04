@@ -7,7 +7,7 @@ const ViewBtn = ({ btnTitle, btnFunc, btnIcon, btnDisable, btnView }) => {
       <div
         onClick={btnFunc}
         disabled={btnDisable}
-        className={`rounded-xl flex items-center gap-[1rem] px-[2rem] py-[1rem] border-[1px] ${
+        className={`rounded-xl flex items-center justify-center gap-[1rem] px-[2rem] py-[1rem] border-[1px] ${
           btnView === "table"
             ? "bg-white border-[#765EA5] text-[#765EA5]"
             : "bg-[#765EA5] border-transparent text-white"

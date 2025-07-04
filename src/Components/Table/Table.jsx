@@ -31,8 +31,8 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
       title={tableTitle}
       className="px-[10rem] pb-[1rem] relative object-cover w-full rounded-xl"
     >
-      <div className="overflow-x-auto no-scrollbar shadow-md rounded-xl">
-        <div className="max-h-[605px] overflow-y-auto no-scrollbar">
+      <div className="overflow-x-auto no-scrollbar rounded-xl">
+        <div className="h-[605px] overflow-y-auto no-scrollbar">
           <table className="w-full border-collapse rounded-xl shadow-md whitespace-nowrap">
             <thead className="sticky top-0 z-10 bg-[#765EA5] text-white">
               <tr>

@@ -329,7 +329,6 @@ const Handlers = () => {
         toast.error("Invalid file response");
         return;
       }
-
       const url = window.URL.createObjectURL(blobData);
       const a = document.createElement("a");
       a.href = url;

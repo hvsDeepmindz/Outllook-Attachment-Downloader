@@ -81,13 +81,13 @@ const AttachmentView = () => {
                 }`}
               />
             )}
-            <img
+            {/* <img
               src={`${import.meta.env.BASE_URL}/Media/upload.png`}
               loading="lazy"
               className={`fa-solid fa-upload text-[1.8rem] text-[grey] cursor-pointer ${
                 index % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"
               } border-[1px] border-[#d2d2d2] w-[30px] h-[30px] px-[0.3rem] py-[0.3rem] rounded-md`}
-            />
+            /> */}
           </div>
         ) : (
           "-"

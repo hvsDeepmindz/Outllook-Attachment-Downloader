@@ -41,14 +41,22 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
                     <input
                       type="checkbox"
                       checked={
-                        selectedAttachmentIds.length === data.length &&
-                        data.length > 0
+                        selectedAttachmentIds.length ===
+                          (Array.isArray(data) ? data : data?.table_data || [])
+                            .length &&
+                        (Array.isArray(data) ? data : data?.table_data || [])
+                          .length > 0
                       }
-                      onChange={() => toggleSelectAllAttachmentRows(data)}
+                      onChange={() =>
+                        toggleSelectAllAttachmentRows(
+                          Array.isArray(data) ? data : data?.table_data || []
+                        )
+                      }
                       className="cursor-pointer"
                     />
                   </th>
                 )}
+
                 <th
                   className={`${
                     attachmentView === true ? "left-[5rem]" : "left-0"

@@ -49,7 +49,7 @@ const DashboardMail = () => {
           progressSize={200}
           progressWidth="15"
         />
-        <div className="flex flex-col gap-[3rem] mr-[10rem] max-sm:mr-0 max-sm:gap-[6rem] max-sm:flex-row max-sm:items-center">
+        <div className="flex flex-col gap-[3rem] mr-[0rem] max-sm:mr-0 max-sm:gap-[6rem] max-sm:flex-row max-sm:items-center">
           <div className="flex items-start gap-[1rem]">
             <div className="rounded-full px-[0.8rem] py-[0.8rem] bg-[#6B76A0] mt-[0.5rem]"></div>
             <div className="flex flex-col gap-[0.5rem]">

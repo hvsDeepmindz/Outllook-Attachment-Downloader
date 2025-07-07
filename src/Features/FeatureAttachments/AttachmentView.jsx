@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import Nav from "../../Components/Header/Nav";
 import SearchFilter from "../../Components/Card/SearchFilter";
 import Table from "../../Components/Table/Table";
@@ -13,12 +13,21 @@ import APIErrorView from "../../Components/Error/APIErrorView";
 
 const AttachmentView = () => {
   const { title: value } = useParams();
+  const location = useLocation();
+  const isAttachmentPage = location.pathname.includes("/attachments/");
+
   const {
+    showDashboard,
     attachmentTableData,
+    fetchAttachmentData,
     handleDownloadAttachments,
     handleDownloadAllAttachments,
-    fetchAttachmentData,
     downloadingAttachmentId,
+    currentPage,
+    itemsPerPage,
+    handlePageChange,
+    handleItemsPerPageChange,
+    updateTableData,
   } = Handlers();
 
   const matchedItem = useMemo(() => {
@@ -30,8 +39,12 @@ const AttachmentView = () => {
   const finalTitle = matchedItem?.title || "Attachments";
 
   useEffect(() => {
-    fetchAttachmentData(value);
-  }, [value]);
+    fetchAttachmentData(decodeURIComponent(value), currentPage, itemsPerPage);
+  }, [value, currentPage, itemsPerPage]);
+
+  useEffect(() => {
+    updateTableData(attachmentTableData, "attachment");
+  }, [attachmentTableData]);
 
   const columns = [
     {
@@ -51,15 +64,15 @@ const AttachmentView = () => {
             loading="lazy"
             className="w-[16px] h-[16px]"
           />
-          &nbsp; {row.attachment_name}
+          &nbsp; {row.name}
         </button>
       ),
     },
     {
       header: "Download",
       accessor: (row, index) =>
-        row.attachment_name ? (
-          <div className={`flex items-center gap-3`}>
+        row.name ? (
+          <div className="flex items-center gap-3">
             {downloadingAttachmentId === row.id ? (
               <div
                 className={`border-[1px] border-[#d2d2d2] w-[30px] h-[30px] rounded-md flex justify-center items-center ${
@@ -73,7 +86,7 @@ const AttachmentView = () => {
                 src={`${import.meta.env.BASE_URL}/Media/download.png`}
                 loading="lazy"
                 onClick={() =>
-                  handleDownloadAttachments(row.id, row.attachment_name)
+                  handleDownloadAttachments(row.id, row.name)
                 }
                 className={`fa-solid fa-download text-[1.8rem] text-[grey] cursor-pointer border-[1px] border-[#d2d2d2] 
                 w-[30px] h-[30px] px-[0.3rem] py-[0.1rem] rounded-md ${
@@ -81,13 +94,6 @@ const AttachmentView = () => {
                 }`}
               />
             )}
-            {/* <img
-              src={`${import.meta.env.BASE_URL}/Media/upload.png`}
-              loading="lazy"
-              className={`fa-solid fa-upload text-[1.8rem] text-[grey] cursor-pointer ${
-                index % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"
-              } border-[1px] border-[#d2d2d2] w-[30px] h-[30px] px-[0.3rem] py-[0.3rem] rounded-md`}
-            /> */}
           </div>
         ) : (
           "-"
@@ -97,31 +103,39 @@ const AttachmentView = () => {
 
   return (
     <>
-      <ToastContainer
-        autoClose={2000}
-        position="top-center"
-        className={`custom-toast-container`}
-      />
-      <Nav />
-      <div className="relative object-cover w-full h-fit mt-[9rem] bg-[#f2f2f2]">
-        <SearchFilter
-          pageTitle="Attachments"
-          filterView={true}
-          attachmentTitle={finalTitle}
-          attachmentView={true}
-          searchView={true}
-          downloadAll={() => {
-            handleDownloadAllAttachments(decodeURIComponent(value));
-          }}
-          showUpload={decodeURIComponent(value) === "resume"}
-        />
-        <Table
-          tableTitle={`${finalTitle} Table`}
-          columns={columns}
-          data={attachmentTableData}
-          attachmentView={true}
-        />
-      </div>
+      <ToastContainer autoClose={2000} position="top-center" />
+      {showDashboard ? (
+        <>
+          <Nav />
+          <div className="relative object-cover w-full h-fit mt-[9rem] bg-[#f2f2f2]">
+            <SearchFilter
+              pageTitle="Attachments"
+              filterView={true}
+              attachmentTitle={finalTitle}
+              attachmentView={true}
+              searchView={false}
+              downloadAll={() =>
+                handleDownloadAllAttachments(decodeURIComponent(value))
+              }
+              showUpload={decodeURIComponent(value) === "resume"}
+            />
+            <Table
+              tableTitle={`${finalTitle} Table`}
+              columns={columns}
+              data={attachmentTableData}
+              attachmentView={true}
+              handlePageChange={(page) =>
+                handlePageChange(page, "attachment", value)
+              }
+              handleItemsPerPageChange={(val) =>
+                handleItemsPerPageChange(val, "attachment", value)
+              }
+            />
+          </div>
+        </>
+      ) : (
+        <APIErrorView />
+      )}
     </>
   );
 };

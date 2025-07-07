@@ -9,13 +9,13 @@ const initialState = {
   currentPage: 1,
   itemsPerPage: 10,
   messageTableData: [],
+  attachmentTableData: [],
   totalItems: 0,
   totalPages: 0,
   syncPendingItems: 0,
   searchText: "",
   historyStack: [],
   selectedAttachment: null,
-  attachmentTableData: [],
   downloadingAttachmentId: null,
   selectedAttachmentIds: [],
   selectAllAttachments: false,
@@ -49,6 +49,11 @@ const Slice = createSlice({
       state.totalItems = action.payload.meta_data?.total_items || 0;
       state.totalPages = action.payload.meta_data?.total_pages || 0;
     },
+    setAttachmentTableData: (state, action) => {
+      state.attachmentTableData = action.payload;
+      state.totalItems = action.payload.meta_data?.total_items || 0;
+      state.totalPages = action.payload.meta_data?.total_pages || 0;
+    },
     setSyncPendingItems: (state, action) => {
       state.syncPendingItems = action.payload;
     },
@@ -63,9 +68,6 @@ const Slice = createSlice({
     },
     setSelectedAttachment: (state, action) => {
       state.selectedAttachment = action.payload;
-    },
-    setAttachmentTableData: (state, action) => {
-      state.attachmentTableData = action.payload;
     },
     setDownloadingAttachmentId: (state, action) => {
       state.downloadingAttachmentId = action.payload;

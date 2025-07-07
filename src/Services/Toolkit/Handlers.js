@@ -182,9 +182,13 @@ const Handlers = () => {
   const fetchAttachmentData = async (value) => {
     dispatch(setLoading(true));
     try {
-      const res = await AttachmentTableData(decodeURIComponent(value));
+      const res = await AttachmentTableData(
+        decodeURIComponent(value),
+        currentPage,
+        itemsPerPage
+      );
       if (res) {
-        dispatch(updateAttachmentTableData(res));
+        dispatch(setAttachmentTableData(res));
         dispatch(setShowDashboard(true));
       } else {
         dispatch(setShowDashboard(false));
@@ -205,30 +209,42 @@ const Handlers = () => {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedData = messageTableData;
+  const paginatedData = location.pathname.includes("/attachments")
+    ? attachmentTableData?.table_data || []
+    : messageTableData || [];
 
-  const updateTableData = (payload) => {
+  const updateTableData = (payload, type = "message") => {
+    const action =
+      type === "attachment" ? setAttachmentTableData : setMessageTableData;
+    const defaultMeta = {
+      total_items: totalItems,
+      total_pages: totalPages,
+    };
+
     if (payload?.table_data && payload?.meta_data) {
-      dispatch(setMessageTableData(payload));
+      dispatch(action(payload));
     } else {
       dispatch(
-        setMessageTableData({
+        action({
           table_data: payload,
-          meta_data: {
-            total_items: totalItems,
-            total_pages: totalPages,
-          },
+          meta_data: defaultMeta,
         })
       );
     }
   };
 
-  const handlePageChange = async (page) => {
+  const handlePageChange = async (
+    page,
+    tableType = "message",
+    attachmentValue = ""
+  ) => {
     if (page > 0 && page <= totalPages) {
       dispatch(setCurrentPage(page));
       dispatch(setLoading(true));
 
-      if (searchText.trim() !== "") {
+      const isAttachment = tableType === "attachment";
+
+      if (searchText.trim() !== "" && !isAttachment) {
         const res = await SearchMessage({
           text: searchText,
           currentPage: page,
@@ -238,19 +254,34 @@ const Handlers = () => {
           dispatch(setMessageTableData(res));
         }
       } else {
-        await fetchMessageData(page, itemsPerPage);
+        if (isAttachment) {
+          const res = await AttachmentTableData(
+            decodeURIComponent(attachmentValue),
+            page,
+            itemsPerPage
+          );
+          if (res) dispatch(setAttachmentTableData(res));
+        } else {
+          await fetchMessageData(page, itemsPerPage);
+        }
       }
 
       dispatch(setLoading(false));
     }
   };
 
-  const handleItemsPerPageChange = async (value) => {
+  const handleItemsPerPageChange = async (
+    value,
+    tableType = "message",
+    attachmentValue = ""
+  ) => {
     dispatch(setItemsPerPage(value));
     dispatch(setCurrentPage(1));
     dispatch(setLoading(true));
 
-    if (searchText.trim() !== "") {
+    const isAttachment = tableType === "attachment";
+
+    if (searchText.trim() !== "" && !isAttachment) {
       const res = await SearchMessage({
         text: searchText,
         currentPage: 1,
@@ -260,7 +291,16 @@ const Handlers = () => {
         dispatch(setMessageTableData(res));
       }
     } else {
-      await fetchMessageData(1, value);
+      if (isAttachment) {
+        const res = await AttachmentTableData(
+          decodeURIComponent(attachmentValue),
+          1,
+          value
+        );
+        if (res) dispatch(setAttachmentTableData(res));
+      } else {
+        await fetchMessageData(1, value);
+      }
     }
 
     dispatch(setLoading(false));
@@ -358,10 +398,6 @@ const Handlers = () => {
     }
   };
 
-  const updateAttachmentTableData = (data) => {
-    dispatch(setAttachmentTableData(data));
-  };
-
   const toggleAttachmentSelect = (id) => {
     dispatch(toggleSelectAttachment(id));
   };
@@ -406,7 +442,6 @@ const Handlers = () => {
     handleAttachmentClick,
     handleDownloadAttachments,
     handleDownloadAllAttachments,
-    updateAttachmentTableData,
     historyStack,
     pushHistory,
     popHistory,

@@ -15,13 +15,13 @@ export const AttachmentData = [
     id: 3,
     icon: `/outlook_mail_loader/Media/duplicate.png`,
     title: `Dupliacte CVs`,
-    value: ``,
+    value: `resume`,
   },
   {
     id: 4,
     icon: `/outlook_mail_loader/Media/paper.png`,
     title: `Dupliacte JDs`,
-    value: ``,
+    value: `jd`,
   },
   {
     id: 5,

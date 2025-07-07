@@ -33,6 +33,7 @@ import {
   DownloadAllAttachments,
   DownloadAttachments,
 } from "../APIs/AttachmentAPI";
+import { AttachmentData } from "../Data/AttachmentData";
 
 const Handlers = () => {
   const dispatch = useDispatch();
@@ -182,11 +183,21 @@ const Handlers = () => {
   const fetchAttachmentData = async (value) => {
     dispatch(setLoading(true));
     try {
+      const decodedValue = decodeURIComponent(value);
+      const matchedItem = AttachmentData.find(
+        (item) =>
+          item.value === decodedValue &&
+          (item.title === "Dupliacte CVs" || item.title === "Dupliacte JDs")
+      );
+      const duplicate = matchedItem ? 1 : 0;
+
       const res = await AttachmentTableData(
-        decodeURIComponent(value),
+        decodedValue,
+        duplicate,
         currentPage,
         itemsPerPage
       );
+
       if (res) {
         dispatch(setAttachmentTableData(res));
         dispatch(setShowDashboard(true));
@@ -255,8 +266,17 @@ const Handlers = () => {
         }
       } else {
         if (isAttachment) {
+          const decodedValue = decodeURIComponent(attachmentValue);
+          const matchedItem = AttachmentData.find(
+            (item) =>
+              item.value === decodedValue &&
+              (item.title === "Dupliacte CVs" || item.title === "Dupliacte JDs")
+          );
+          const duplicate = matchedItem ? 1 : 0;
+
           const res = await AttachmentTableData(
-            decodeURIComponent(attachmentValue),
+            decodedValue,
+            duplicate,
             page,
             itemsPerPage
           );
@@ -292,8 +312,17 @@ const Handlers = () => {
       }
     } else {
       if (isAttachment) {
+        const decodedValue = decodeURIComponent(attachmentValue);
+        const matchedItem = AttachmentData.find(
+          (item) =>
+            item.value === decodedValue &&
+            (item.title === "Dupliacte CVs" || item.title === "Dupliacte JDs")
+        );
+        const duplicate = matchedItem ? 1 : 0;
+
         const res = await AttachmentTableData(
-          decodeURIComponent(attachmentValue),
+          decodedValue,
+          duplicate,
           1,
           value
         );
@@ -327,6 +356,15 @@ const Handlers = () => {
     }
     dispatch(setLoading(false));
   };
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (path.includes("/attachments")) {
+      dispatch(setCurrentPage(1));
+    } else if (path.includes("/messages") || path === "/dashboard") {
+      dispatch(setCurrentPage(1));
+    }
+  }, [location.pathname]);
 
   const pushHistory = (path) => {
     const currentPath = location.pathname;

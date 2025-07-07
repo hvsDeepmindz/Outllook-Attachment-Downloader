@@ -24,7 +24,7 @@ const Table = ({ tableTitle, columns, data, attachmentView = false }) => {
     updateTableData(data);
   }, [data]);
 
-  const perPageOptions = [3, 10, 15, 20, 25, 30, 35, 40, 45, 50];
+  const perPageOptions = [10, 15, 20, 25, 30, 35, 40, 45, 50];
 
   return (
     <div

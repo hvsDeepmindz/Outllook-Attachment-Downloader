@@ -28,6 +28,8 @@ const AttachmentView = () => {
     handlePageChange,
     handleItemsPerPageChange,
     updateTableData,
+    selectedAttachment,
+    handleAttachmentClick,
   } = Handlers();
 
   const matchedItem = useMemo(() => {
@@ -45,6 +47,16 @@ const AttachmentView = () => {
   useEffect(() => {
     updateTableData(attachmentTableData, "attachment");
   }, [attachmentTableData]);
+
+  useEffect(() => {
+    const decodedValue = decodeURIComponent(value);
+    if (!selectedAttachment || selectedAttachment.value !== decodedValue) {
+      const matched = AttachmentData.find(
+        (item) => item.value === decodedValue
+      );
+      if (matched) handleAttachmentClick(matched);
+    }
+  }, []);
 
   const columns = [
     {
@@ -85,9 +97,7 @@ const AttachmentView = () => {
               <img
                 src={`${import.meta.env.BASE_URL}/Media/download.png`}
                 loading="lazy"
-                onClick={() =>
-                  handleDownloadAttachments(row.id, row.name)
-                }
+                onClick={() => handleDownloadAttachments(row.id, row.name)}
                 className={`fa-solid fa-download text-[1.8rem] text-[grey] cursor-pointer border-[1px] border-[#d2d2d2] 
                 w-[30px] h-[30px] px-[0.3rem] py-[0.1rem] rounded-md ${
                   index % 2 === 0 ? "bg-[#E4E2F2]" : "bg-white"

@@ -184,16 +184,19 @@ const Handlers = () => {
     dispatch(setLoading(true));
     try {
       const decodedValue = decodeURIComponent(value);
-      const matchedItem = AttachmentData.find(
-        (item) =>
-          item.value === decodedValue &&
-          (item.title === "Dupliacte CVs" || item.title === "Dupliacte JDs")
-      );
-      const duplicate = matchedItem ? 1 : 0;
+
+      const matchedItem =
+        selectedAttachment?.value === decodedValue
+          ? selectedAttachment
+          : AttachmentData.find((item) => item.value === decodedValue);
+
+      const isDuplicate =
+        matchedItem?.title === "Dupliacte CVs" ||
+        matchedItem?.title === "Dupliacte JDs";
 
       const res = await AttachmentTableData(
         decodedValue,
-        duplicate,
+        isDuplicate ? 1 : 0,
         currentPage,
         itemsPerPage
       );
@@ -204,11 +207,9 @@ const Handlers = () => {
       } else {
         dispatch(setShowDashboard(false));
         toast.error("Not Authorized");
-        setTimeout(() => {
-          pushHistory("/login");
-        }, 1000);
+        setTimeout(() => pushHistory("/login"), 1000);
       }
-    } catch (error) {
+    } catch {
       dispatch(setShowDashboard(false));
       dispatch(setLoading(false));
     } finally {
@@ -267,16 +268,18 @@ const Handlers = () => {
       } else {
         if (isAttachment) {
           const decodedValue = decodeURIComponent(attachmentValue);
-          const matchedItem = AttachmentData.find(
-            (item) =>
-              item.value === decodedValue &&
-              (item.title === "Dupliacte CVs" || item.title === "Dupliacte JDs")
-          );
-          const duplicate = matchedItem ? 1 : 0;
+          const matchedItem =
+            selectedAttachment?.value === decodedValue
+              ? selectedAttachment
+              : AttachmentData.find((item) => item.value === decodedValue);
+
+          const isDuplicate =
+            matchedItem?.title === "Dupliacte CVs" ||
+            matchedItem?.title === "Dupliacte JDs";
 
           const res = await AttachmentTableData(
             decodedValue,
-            duplicate,
+            isDuplicate ? 1 : 0,
             page,
             itemsPerPage
           );
@@ -313,16 +316,18 @@ const Handlers = () => {
     } else {
       if (isAttachment) {
         const decodedValue = decodeURIComponent(attachmentValue);
-        const matchedItem = AttachmentData.find(
-          (item) =>
-            item.value === decodedValue &&
-            (item.title === "Dupliacte CVs" || item.title === "Dupliacte JDs")
-        );
-        const duplicate = matchedItem ? 1 : 0;
+        const matchedItem =
+          selectedAttachment?.value === decodedValue
+            ? selectedAttachment
+            : AttachmentData.find((item) => item.value === decodedValue);
+
+        const isDuplicate =
+          matchedItem?.title === "Dupliacte CVs" ||
+          matchedItem?.title === "Dupliacte JDs";
 
         const res = await AttachmentTableData(
           decodedValue,
-          duplicate,
+          isDuplicate ? 1 : 0,
           1,
           value
         );

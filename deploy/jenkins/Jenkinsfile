@@ -63,7 +63,6 @@ pipeline {
                             echo "Successfully extracted archive on server"
                         '
                     """
-
                 }
             }
         }
@@ -71,15 +70,17 @@ pipeline {
         stage('Start Application') {
             steps {
                 script {
+                    sshagent(credentials: ['demoserver']) {
                         sh """
                             ssh ${env.USER}@${env.DEPLOY_SERVER} '
                                 source ~/.nvm/nvm.sh &&
-                                cd ${env.DEPLOY_PATH}/${env.DOMAIN_NAME}/${env.FOLDER_PATH}/${env.FOLDER_NAME}/ &&
-                                chmod +x ./deploy/scripts/dev.sh &&
-                                chmod 777 ./deploy/scripts/dev.sh &&
-                                ./deploy/scripts/dev.sh
+                                cd ${env.DEPLOY_PATH}/${env.DOMAIN_NAME}/${env.FOLDER_PATH}/${env.FOLDER_NAME}/serve &&
+                                chmod +x dev.sh &&
+                                chmod 777 dev.sh &&
+                                ./dev.sh
                             '
                         """
+                    }
                 }
             }
         }

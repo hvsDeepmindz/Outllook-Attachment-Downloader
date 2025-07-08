@@ -23,11 +23,24 @@ pipeline {
             }
         }
 
-        stage('Archive Code') {
+        stage('Build') {
+            steps {
+                script {
+                    sshagent(credentials: ['demoserver']) {
+                        sh "npm i && npm run prod:build && cp ./deploy/scripts/dev.sh ./serve"
+                    }
+                }
+            }
+        }
+
+        stage('Zip Code') {
             steps {
                 script {
                     sh """
-                        tar -czvf ${env.ARCHIVE_NAME} .[!.]* * 
+                        if ! tar -czf ${env.ARCHIVE_NAME} serve; then
+                            echo "Failed to create archive"
+                            exit 1
+                        fi
                         echo "Successfully created archive ${env.ARCHIVE_NAME}"
                     """
                 }

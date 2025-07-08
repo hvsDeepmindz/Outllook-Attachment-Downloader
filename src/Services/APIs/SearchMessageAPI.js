@@ -5,7 +5,7 @@ export const SearchMessage = async ({ text, currentPage, itemsPerPage }) => {
     method: "get",
     maxBodyLength: Infinity,
     url: `${
-      import.meta.env.VITE_REACT_APP_BASE_URL
+      import.meta.env.VITE_BACKEND_URL
     }/search/message?text=${text}&current_page=${currentPage}&item_per_page=${itemsPerPage}`,
     headers: {
       accept: "application/json",

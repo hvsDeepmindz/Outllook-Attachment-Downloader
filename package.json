@@ -4,10 +4,18 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "NODE_ENV=development vite",
+    "local": "vite --mode development",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "staging": "NODE_ENV=staging vite",
+    "build:stage": "vite build --mode staging",
+    "prod:build": "npm run build && npm run rebuild:save:prod",
+    "stage:build": "npm run build:stage && npm run rebuild:save:prod",
+    "rebuild:save:prod": "mv dist build && rm -rf ./serve/build &&  mv build ./serve/",
+    "start:prod": "cd serve && npm install && npm run start",
+    "start:stage": "cd serve && npm install && npm run start:staging"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",

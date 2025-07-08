@@ -1,0 +1,81 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs "node"
+    }
+
+    environment {
+        SSH_KEY = credentials('demoserver')
+        ARCHIVE_NAME = 'outlook_frontend.tar.gz'
+        FOLDER_PATH = 'outlook'
+        FOLDER_NAME = 'frontend'
+        USER = "${env.UBUNTU_USER}"
+    }
+ 
+    stages {
+        stage('Environment') {
+            steps {
+                echo "Deploy User: ${env.USER}"
+                echo "Deploy Server: ${env.DEPLOY_SERVER}"
+                echo "Deploy Path: ${env.DEPLOY_PATH}"
+                echo "DOMAIN_NAME: ${env.DOMAIN_NAME}"
+            }
+        }
+
+        stage('Archive Code') {
+            steps {
+                script {
+                    sh """
+                        tar -czvf ${env.ARCHIVE_NAME} .[!.]* * 
+                        echo "Successfully created archive ${env.ARCHIVE_NAME}"
+                    """
+                }
+            }
+        }
+ 
+        stage('Deploy to EC2') {
+            steps {
+                script {
+
+                    // Copy the archived code to the deployment server
+                    sh """
+                        scp ${env.ARCHIVE_NAME} ${env.USER}@${env.DEPLOY_SERVER}:${env.DEPLOY_PATH}/${env.DOMAIN_NAME}/${env.FOLDER_PATH}/
+                        echo "Successfully copied archive to server"
+
+                        ssh ${env.USER}@${env.DEPLOY_SERVER} '
+                            cd ${env.DEPLOY_PATH}/${env.DOMAIN_NAME}/${env.FOLDER_PATH} &&
+                            tar -xzf ${env.ARCHIVE_NAME} -C ${env.FOLDER_NAME} &&
+                            rm ${env.ARCHIVE_NAME} &&
+                            echo "Successfully extracted archive on server"
+                        '
+                    """
+
+                }
+            }
+        }
+ 
+        stage('Start Application') {
+            steps {
+                script {
+                        sh """
+                            ssh ${env.USER}@${env.DEPLOY_SERVER} '
+                                source ~/.nvm/nvm.sh &&
+                                cd ${env.DEPLOY_PATH}/${env.DOMAIN_NAME}/${env.FOLDER_PATH}/${env.FOLDER_NAME}/ &&
+                                chmod +x ./deploy/scripts/dev.sh &&
+                                chmod 777 ./deploy/scripts/dev.sh &&
+                                ./deploy/scripts/dev.sh
+                            '
+                        """
+                }
+            }
+        }
+    }
+ 
+    post {
+        always {
+            // Clean up local archive
+            sh "rm -f ${env.ARCHIVE_NAME}"
+        }
+    }
+}

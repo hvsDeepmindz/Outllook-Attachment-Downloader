@@ -10,7 +10,12 @@ import AttachmentView from "./Features/FeatureAttachments/AttachmentView";
 const App = () => {
   return (
     <>
-      <BrowserRouter basename="/outlook_mail_loader">
+      <BrowserRouter
+        basename={`${import.meta.env.VITE_BASE_PATH != ""
+          ? `/${import.meta.env.VITE_BASE_PATH}`
+          : ""
+          }`}
+      >
         <div className={`w-full relative object-cover bg-white`}>
           <Routes>
             <Route path="/" element={<Navigate to={"/login"} />}></Route>
@@ -23,7 +28,7 @@ const App = () => {
             <Route path="/attachments/:title" element={<AttachmentView />} />
           </Routes>
         </div>
-      </BrowserRouter>
+      </BrowserRouter >
     </>
   );
 };

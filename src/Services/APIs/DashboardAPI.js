@@ -5,7 +5,7 @@ export const DashboardData = async () => {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${import.meta.env.VITE_REACT_APP_BASE_URL}/dash/dash-data`,
+    url: `${import.meta.env.VITE_BACKEND_URL}/dash/dash-data`,
     headers: {},
     withCredentials: true,
   };

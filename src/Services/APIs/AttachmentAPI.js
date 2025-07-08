@@ -9,7 +9,7 @@ export const AttachmentTableData = async (
   try {
     const response = await axios.get(
       `${
-        import.meta.env.VITE_REACT_APP_BASE_URL
+        import.meta.env.VITE_BACKEND_URL
       }/attachment/table-data?target_file=${file}&duplicate=${duplicate}&current_page=${currentPage}&item_per_page=${itemsPerPage}`,
       {
         headers: {
@@ -27,7 +27,7 @@ export const AttachmentTableData = async (
 
 export const DownloadAttachments = async (attachmentId) => {
   const response = await axios.get(
-    `${import.meta.env.VITE_REACT_APP_BASE_URL}/attachment/download`,
+    `${import.meta.env.VITE_BACKEND_URL}/attachment/download`,
     {
       params: { attachment_id: attachmentId },
       responseType: "blob",
@@ -42,7 +42,7 @@ export const DownloadAllAttachments = async (filename) => {
   const config = {
     method: "get",
     url: `${
-      import.meta.env.VITE_REACT_APP_BASE_URL
+      import.meta.env.VITE_BACKEND_URL
     }/attachment/download-all?target_file=${filename}`,
     headers: {
       Accept: "application/zip",

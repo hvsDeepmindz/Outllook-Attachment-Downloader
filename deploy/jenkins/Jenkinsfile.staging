@@ -1,0 +1,106 @@
+pipeline {
+    agent any
+    
+    tools {
+        nodejs "node"
+    }
+
+    environment {
+        SSH_KEY = credentials('demoserver')
+        FOLDER_PATH = 'admin/frontend'
+        ARCHIVE_NAME = 'staging-server.tar.gz'
+    }
+
+    stages {
+        stage('Environment') {
+            steps {
+                echo "Deploy User: ${env.DEPLOY_USER}"
+                echo "Deploy Server: ${env.DEPLOY_SERVER}"
+                echo "Deploy Path: ${env.DEPLOY_PATH}"
+                echo "STAGING_DOMAIN_NAME: ${env.STAGING_DOMAIN_NAME}"
+                echo "FOLDER_PATH: ${env.FOLDER_PATH}"
+            }
+
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    sshagent(credentials: ['demoserver']) {
+                        sh "npm i && npm run stage:build && cp ./deploy/scripts/staging.sh ./prod-server"
+                    }
+                }
+            }
+        }
+
+        stage('Zip Code') {
+            steps {
+                script {
+                    sh """
+                        if ! tar -czf ${env.ARCHIVE_NAME} prod-server; then
+                            echo "Failed to create archive"
+                            exit 1
+                        fi
+                        echo "Successfully created archive ${env.ARCHIVE_NAME}"
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    sshagent(credentials: ['demoserver']) {
+                        // Copy the zipped file to the deployment server
+                        sh """
+                            if ! scp ${env.ARCHIVE_NAME} ${env.DEPLOY_USER}@${env.DEPLOY_SERVER}:${env.DEPLOY_PATH}/${env.STAGING_DOMAIN_NAME}/${env.FOLDER_PATH}/ ; then
+                                echo "Failed to copy archive to server"
+                                exit 1
+                            fi
+                            echo "Successfully copied archive to server"
+                            """
+                        
+                        // SSH into the server, remove old directory if it exists, unzip the new code, and clean up
+                        sh """
+                            ssh ${env.DEPLOY_USER}@${env.DEPLOY_SERVER} '
+                                cd ${env.DEPLOY_PATH}/${env.STAGING_DOMAIN_NAME}/${env.FOLDER_PATH} &&
+                                rm -rf prod-server &&
+                                if ! tar -xzf ${env.ARCHIVE_NAME}; then
+                                    echo "Failed to extract archive on server"
+                                    exit 1
+                                fi &&
+                                rm ${env.ARCHIVE_NAME} &&
+                                echo "Successfully extracted archive on server"
+                            '
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Start Application') {
+            steps {
+                script {
+                    sshagent(credentials: ['demoserver']) {
+                        sh """
+                            ssh ${env.DEPLOY_USER}@${env.DEPLOY_SERVER} '
+                                source ~/.nvm/nvm.sh &&
+                                cd ${env.DEPLOY_PATH}/${env.STAGING_DOMAIN_NAME}/${env.FOLDER_PATH}/prod-server &&
+                                chmod +x staging.sh &&
+                                chmod 777 staging.sh &&
+                                ./staging.sh
+                            '
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up local zip file
+            sh "rm -f prod-server.zip"
+        }
+    }
+}

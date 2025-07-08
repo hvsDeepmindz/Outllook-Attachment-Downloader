@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start:dev": "NODE_ENV=development node app.js",
+    "start:staging": "NODE_ENV=staging node app.js",
+    "start": "NODE_ENV=production node app.js",
+    "dev": "NODE_ENV=development node app.js",
+    "cleanup": "gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "colorette": "^2.0.20",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "gulp-replace": "^1.1.4",
+    "nodemon": "^3.0.1",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}

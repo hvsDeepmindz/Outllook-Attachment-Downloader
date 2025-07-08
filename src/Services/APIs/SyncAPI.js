@@ -4,7 +4,7 @@ export const SyncData = async () => {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${import.meta.env.VITE_REACT_APP_BASE_URL}/message/sync`,
+    url: `${import.meta.env.VITE_BACKEND_URL}/message/sync`,
     headers: {
       accept: "application/json",
     },
@@ -27,7 +27,7 @@ export const SyncStatus = async () => {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${import.meta.env.VITE_REACT_APP_BASE_URL}/message/sync-status`,
+    url: `${import.meta.env.VITE_BACKEND_URL}/message/sync-status`,
     headers: {
       accept: "application/json",
     },

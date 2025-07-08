@@ -30,15 +30,12 @@ const AttachmentView = () => {
     updateTableData,
     selectedAttachment,
     handleAttachmentClick,
+    searchText,
+    handleSearchTextChange,
+    handleSearchSubmit,
   } = Handlers();
 
-  const matchedItem = useMemo(() => {
-    return AttachmentData.find(
-      (item) => item.value === decodeURIComponent(value)
-    );
-  }, [value]);
-
-  const finalTitle = matchedItem?.title || "Attachments";
+  const finalTitle = selectedAttachment?.title || "Attachments";
 
   useEffect(() => {
     fetchAttachmentData(decodeURIComponent(value), currentPage, itemsPerPage);
@@ -113,17 +110,24 @@ const AttachmentView = () => {
 
   return (
     <>
-      <ToastContainer autoClose={2000} position="top-center" />
+      <ToastContainer
+        autoClose={2000}
+        position="top-center"
+        className={"custom-toast-container"}
+      />
       {showDashboard ? (
         <>
           <Nav />
-          <div className="relative object-cover w-full h-fit mt-[9rem] bg-[#f2f2f2]">
+          <div className="relative object-cover w-full h-screen mt-[9rem] bg-[#f2f2f2]">
             <SearchFilter
               pageTitle="Attachments"
               filterView={true}
               attachmentTitle={finalTitle}
               attachmentView={true}
               searchView={false}
+              searchText={searchText}
+              onSearchChange={handleSearchTextChange}
+              onSearchSubmit={handleSearchSubmit}
               downloadAll={() =>
                 handleDownloadAllAttachments(decodeURIComponent(value))
               }

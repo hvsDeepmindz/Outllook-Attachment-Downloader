@@ -345,20 +345,56 @@ const Handlers = () => {
   };
 
   const handleSearchSubmit = async () => {
-    if (searchText.trim() === "") {
-      fetchMessageData(1, itemsPerPage);
+    const trimmed = searchText.trim();
+    const isAttachment = location.pathname.includes("/attachments");
+
+    if (trimmed === "") {
+      if (isAttachment) {
+        fetchAttachmentData(routeParamTitle);
+      } else {
+        fetchMessageData(1, itemsPerPage);
+      }
       return;
     }
+
     dispatch(setLoading(true));
-    const res = await SearchMessage({
-      text: searchText,
-      currentPage: 1,
-      itemsPerPage,
-    });
-    if (res?.table_data) {
-      dispatch(setMessageTableData(res));
-      dispatch(setCurrentPage(1));
+
+    if (isAttachment) {
+      const decodedValue = decodeURIComponent(routeParamTitle);
+      const matchedItem =
+        selectedAttachment?.value === decodedValue
+          ? selectedAttachment
+          : AttachmentData.find((item) => item.value === decodedValue);
+
+      const isDuplicate =
+        matchedItem?.title === "Dupliacte CVs" ||
+        matchedItem?.title === "Dupliacte JDs";
+
+      const res = await AttachmentTableData(
+        decodedValue,
+        isDuplicate ? 1 : 0,
+        1,
+        itemsPerPage,
+        trimmed
+      );
+
+      if (res) {
+        dispatch(setAttachmentTableData(res));
+        dispatch(setCurrentPage(1));
+      }
+    } else {
+      const res = await SearchMessage({
+        text: trimmed,
+        currentPage: 1,
+        itemsPerPage,
+      });
+
+      if (res?.table_data) {
+        dispatch(setMessageTableData(res));
+        dispatch(setCurrentPage(1));
+      }
     }
+
     dispatch(setLoading(false));
   };
 

@@ -4,13 +4,16 @@ export const AttachmentTableData = async (
   file,
   duplicate,
   currentPage,
-  itemsPerPage
+  itemsPerPage,
+  emailLike = ""
 ) => {
   try {
     const response = await axios.get(
       `${
         import.meta.env.VITE_BACKEND_URL
-      }/attachment/table-data?target_file=${file}&duplicate=${duplicate}&current_page=${currentPage}&item_per_page=${itemsPerPage}`,
+      }/attachment/table-data?target_file=${file}&duplicate=${duplicate}&current_page=${currentPage}&item_per_page=${itemsPerPage}${
+        emailLike ? `&email_like=${emailLike}` : ""
+      }`,
       {
         headers: {
           accept: "application/json",
